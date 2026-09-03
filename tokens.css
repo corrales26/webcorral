@@ -1,0 +1,67 @@
+/* Hallmark · macrostructure: Marquee Hero · tone: luxury · anchor hue: gold
+ * theme: custom (studied-DNA from client mockup)
+ * paper: oklch(98% 0.008 250) · accent: oklch(72% 0.12 75) · display: Playfair Display · body: Montserrat
+ * nav: N12 banner-retract · footer: Ft5 statement
+ * audience: compradores/vendedores/inversores Cantabria · use: contacto/valoración · tone: luxury
+ */
+
+:root {
+  /* Colors — light */
+  --color-paper: oklch(98% 0.008 250);
+  --color-paper-2: oklch(95% 0.012 250);
+  --color-paper-3: oklch(92% 0.014 250);
+  --color-ink: oklch(18% 0.04 250);
+  --color-ink-2: oklch(35% 0.03 250);
+  --color-muted: oklch(50% 0.02 250);
+  --color-rule: oklch(85% 0.015 250);
+  --color-rule-2: oklch(90% 0.012 250);
+  --color-accent: oklch(72% 0.12 75);
+  --color-accent-hover: oklch(65% 0.13 75);
+  --color-navy: oklch(18% 0.05 250);
+  --color-navy-light: oklch(24% 0.045 250);
+  --color-on-navy: oklch(95% 0.01 250);
+  --color-on-accent: oklch(18% 0.04 250);
+  --color-focus: oklch(72% 0.12 75);
+  --color-success: oklch(55% 0.14 145);
+  --color-error: oklch(55% 0.18 25);
+
+  /* Typography */
+  --font-display: var(--font-playfair);
+  --font-body: var(--font-montserrat);
+
+  /* Spacing — 4pt scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  /* Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 150ms;
+  --dur-normal: 250ms;
+  --dur-slow: 400ms;
+}
+
+.dark {
+  --color-paper: oklch(14% 0.03 250);
+  --color-paper-2: oklch(18% 0.035 250);
+  --color-paper-3: oklch(22% 0.04 250);
+  --color-ink: oklch(95% 0.01 250);
+  --color-ink-2: oklch(78% 0.015 250);
+  --color-muted: oklch(60% 0.02 250);
+  --color-rule: oklch(28% 0.03 250);
+  --color-rule-2: oklch(32% 0.028 250);
+  --color-navy: oklch(12% 0.04 250);
+  --color-navy-light: oklch(18% 0.045 250);
+}
