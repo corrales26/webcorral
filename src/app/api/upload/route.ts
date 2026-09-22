@@ -3,6 +3,11 @@ import { promises as fs } from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
 import { isAuthenticated } from "@/lib/auth";
+import {
+  getSupabaseAdmin,
+  isSupabaseConfigured,
+  PROPERTY_IMAGES_BUCKET,
+} from "@/lib/supabase/admin";
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads", "properties");
 const MAX_SIZE = 5 * 1024 * 1024;
@@ -38,13 +43,33 @@ export async function POST(request: Request) {
 
     const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
     const filename = `${randomUUID()}.${ext}`;
-    await fs.mkdir(UPLOAD_DIR, { recursive: true });
-
     const buffer = Buffer.from(await file.arrayBuffer());
+
+    if (isSupabaseConfigured()) {
+      const supabase = getSupabaseAdmin();
+      const objectPath = `properties/${filename}`;
+      const { error } = await supabase.storage
+        .from(PROPERTY_IMAGES_BUCKET)
+        .upload(objectPath, buffer, {
+          contentType: file.type,
+          upsert: false,
+        });
+
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+
+      const { data } = supabase.storage
+        .from(PROPERTY_IMAGES_BUCKET)
+        .getPublicUrl(objectPath);
+
+      return NextResponse.json({ url: data.publicUrl });
+    }
+
+    await fs.mkdir(UPLOAD_DIR, { recursive: true });
     await fs.writeFile(path.join(UPLOAD_DIR, filename), buffer);
 
-    const url = `/uploads/properties/${filename}`;
-    return NextResponse.json({ url });
+    return NextResponse.json({ url: `/uploads/properties/${filename}` });
   } catch {
     return NextResponse.json(
       { error: "Error al subir la imagen" },

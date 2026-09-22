@@ -70,7 +70,7 @@ export function Investors() {
 
             <Link
               href="/inversores"
-              className="mt-10 inline-flex items-center gap-2 rounded-sm border-2 border-[var(--color-accent)] px-6 py-3 text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)] transition-colors hover:bg-[var(--color-accent)] hover:text-[var(--color-on-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
+              className="mt-10 inline-flex w-full items-center justify-center gap-2 rounded-sm border-2 border-[var(--color-accent)] px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)] transition-colors hover:bg-[var(--color-accent)] hover:text-[var(--color-on-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)] sm:w-auto"
             >
               Más información para inversores →
             </Link>

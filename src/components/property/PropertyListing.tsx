@@ -1,18 +1,34 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import type { Property, PropertyStatus, PropertyType } from "@/lib/types/property";
 import { PROPERTY_STATUSES, PROPERTY_TYPES } from "@/lib/types/property";
 import { PropertyCard } from "./PropertyCard";
+
+function parseStatus(value: string | null): PropertyStatus | "all" {
+  if (value && value in PROPERTY_STATUSES) return value as PropertyStatus;
+  return "all";
+}
+
+function parseType(value: string | null): PropertyType | "all" {
+  if (value && value in PROPERTY_TYPES) return value as PropertyType;
+  return "all";
+}
 
 interface PropertyListingProps {
   properties: Property[];
 }
 
 export function PropertyListing({ properties }: PropertyListingProps) {
-  const [statusFilter, setStatusFilter] = useState<PropertyStatus | "all">("all");
-  const [typeFilter, setTypeFilter] = useState<PropertyType | "all">("all");
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const [statusFilter, setStatusFilter] = useState<PropertyStatus | "all">(() =>
+    parseStatus(searchParams.get("status"))
+  );
+  const [typeFilter, setTypeFilter] = useState<PropertyType | "all">(() =>
+    parseType(searchParams.get("type"))
+  );
+  const [search, setSearch] = useState(() => searchParams.get("q") ?? "");
   const [sort, setSort] = useState<"recent" | "price-asc" | "price-desc">("recent");
 
   const filtered = useMemo(() => {

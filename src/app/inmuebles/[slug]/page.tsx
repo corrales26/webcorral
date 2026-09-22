@@ -63,12 +63,12 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
         backLabel="Volver a inmuebles"
       />
       <PageContent>
-        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
-          <div className="space-y-8">
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+          <div className="min-w-0 space-y-8">
             <PropertyGallery images={property.images} title={property.title} />
 
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div className="min-w-0">
                 <p className="font-[family-name:var(--font-display)] text-4xl font-bold text-[var(--color-accent)]">
                   {formatPrice(property)}
                 </p>
@@ -91,7 +91,7 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
               {[
                 { label: "Habitaciones", value: property.bedrooms },
                 { label: "Baños", value: property.bathrooms },
@@ -104,12 +104,12 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
                 .map((item) => (
                   <div
                     key={item!.label}
-                    className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4 text-center"
+                    className="min-w-0 rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-3 text-center sm:p-4"
                   >
                     <p className="font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--color-accent)]">
                       {item!.value}
                     </p>
-                    <p className="mt-1 text-xs uppercase tracking-wider text-[var(--color-muted)]">
+                    <p className="mt-1 break-words text-[11px] uppercase tracking-wide text-[var(--color-muted)] sm:text-xs sm:tracking-wider">
                       {item!.label}
                     </p>
                   </div>
@@ -146,7 +146,7 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
             </p>
           </div>
 
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          <div className="min-w-0 lg:sticky lg:top-24 lg:self-start">
             <ContactForm
               title="Solicitar información"
               description={`¿Te interesa este inmueble en ${property.location}? Déjanos tus datos y te contactaremos.`}

@@ -56,8 +56,8 @@ export function PropertySpecs({ property }: PropertySpecsProps) {
               key={spec.label}
               className="flex justify-between gap-4 border-b border-[var(--color-rule)] py-2 text-sm"
             >
-              <dt className="text-[var(--color-muted)]">{spec.label}</dt>
-              <dd className="text-right font-medium text-[var(--color-ink)]">
+              <dt className="shrink-0 text-[var(--color-muted)]">{spec.label}</dt>
+              <dd className="min-w-0 break-words text-right font-medium text-[var(--color-ink)]">
                 {spec.value}
               </dd>
             </div>

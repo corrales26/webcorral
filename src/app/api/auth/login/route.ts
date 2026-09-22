@@ -3,11 +3,14 @@ import { createSession, verifyPassword } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
-    const { password } = (await request.json()) as { password?: string };
+    const { email, password } = (await request.json()) as {
+      email?: string;
+      password?: string;
+    };
 
-    if (!password || !verifyPassword(password)) {
+    if (!email || !password || !(await verifyPassword(email, password))) {
       return NextResponse.json(
-        { error: "Contraseña incorrecta" },
+        { error: "Correo o contraseña incorrectos" },
         { status: 401 }
       );
     }

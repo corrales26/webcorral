@@ -7,9 +7,9 @@ export default async function AdminPropertiesPage() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold text-[var(--color-ink)]">
+          <h1 className="font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--color-ink)] sm:text-3xl">
             Inmuebles
           </h1>
           <p className="mt-1 text-[var(--color-muted)]">
@@ -18,13 +18,52 @@ export default async function AdminPropertiesPage() {
         </div>
         <Link
           href="/admin/inmuebles/nuevo"
-          className="rounded-sm bg-[var(--color-accent)] px-4 py-2 text-sm font-semibold uppercase tracking-wider text-[var(--color-on-accent)] transition-colors hover:bg-[var(--color-accent-hover)]"
+          className="rounded-sm bg-[var(--color-accent)] px-4 py-3 text-center text-sm font-semibold uppercase tracking-wider text-[var(--color-on-accent)] transition-colors hover:bg-[var(--color-accent-hover)] sm:py-2"
         >
           + Nuevo inmueble
         </Link>
       </div>
 
-      <div className="mt-8 overflow-x-auto rounded-lg border border-[var(--color-rule)]">
+      <ul className="mt-8 space-y-3 md:hidden">
+        {properties.map((property) => (
+          <li key={property.id} className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="font-mono text-xs text-[var(--color-muted)]">{property.reference}</p>
+                <p className="mt-1 font-medium text-[var(--color-ink)]">{property.title}</p>
+                <p className="mt-1 text-sm text-[var(--color-muted)]">{property.location}</p>
+              </div>
+              <p className="shrink-0 text-sm font-semibold text-[var(--color-ink)]">{formatPrice(property)}</p>
+            </div>
+            <p className="mt-2 text-sm text-[var(--color-ink-2)]">{statusLabel(property.status)}</p>
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+              <span
+                className={`rounded-sm px-2 py-0.5 text-xs ${
+                  property.published
+                    ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+                    : "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300"
+                }`}
+              >
+                {property.published ? "Publicado" : "Borrador"}
+                {property.featured ? " · ★" : ""}
+              </span>
+              <span className="text-xs text-[var(--color-muted)]">{property.images.length} fotos</span>
+            </div>
+            <div className="mt-3 flex gap-4">
+              <Link href={`/admin/inmuebles/${property.id}/editar`} className="text-sm text-[var(--color-accent)]">
+                Editar
+              </Link>
+              {property.published && (
+                <Link href={`/inmuebles/${property.slug}`} target="_blank" className="text-sm text-[var(--color-muted)]">
+                  Ver
+                </Link>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-8 hidden overflow-x-auto rounded-lg border border-[var(--color-rule)] md:block">
         <table className="w-full min-w-[800px] text-left text-sm">
           <thead className="bg-[var(--color-paper-2)] text-xs uppercase tracking-wider text-[var(--color-muted)]">
             <tr>

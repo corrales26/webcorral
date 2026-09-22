@@ -3,12 +3,22 @@ import { isAuthenticated } from "@/lib/auth";
 import {
   createProperty,
   getAllProperties,
+  getNextReference,
 } from "@/lib/storage/properties";
 import type { PropertyInput } from "@/lib/types/property";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const admin = searchParams.get("admin") === "true";
+
+  if (searchParams.get("nextReference") === "true") {
+    const authed = await isAuthenticated();
+    if (!authed) {
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    }
+    const reference = await getNextReference();
+    return NextResponse.json({ reference });
+  }
 
   if (admin) {
     const authed = await isAuthenticated();

@@ -13,7 +13,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
   const gallery = images.length > 0 ? images : ["/uploads/placeholder.jpg"];
 
   return (
-    <div className="space-y-3">
+    <div className="min-w-0 space-y-3">
       <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-[var(--color-paper-3)]">
         <Image
           src={gallery[activeIndex]}
@@ -53,7 +53,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
       </div>
 
       {gallery.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto pb-1">
+        <div className="flex min-w-0 gap-2 overflow-x-auto pb-1">
           {gallery.map((image, index) => (
             <button
               key={image}

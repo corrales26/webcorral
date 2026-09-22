@@ -16,10 +16,10 @@ export default async function EditPropertyPage({ params }: EditPropertyPageProps
 
   return (
     <div>
-      <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold text-[var(--color-ink)]">
+      <h1 className="font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--color-ink)] sm:text-3xl">
         Editar inmueble
       </h1>
-      <p className="mt-2 text-[var(--color-muted)]">
+      <p className="mt-2 break-words text-[var(--color-muted)]">
         {property.reference} — {property.title}
       </p>
       <div className="mt-8">

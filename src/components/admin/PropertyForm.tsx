@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { Property } from "@/lib/types/property";
@@ -85,6 +85,25 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         }
       : defaultValues
   );
+
+  useEffect(() => {
+    if (mode !== "create") return;
+
+    let cancelled = false;
+    fetch("/api/properties?nextReference=true")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { reference?: string } | null) => {
+        if (cancelled || !data?.reference) return;
+        setForm((current) =>
+          current.reference ? current : { ...current, reference: data.reference! }
+        );
+      })
+      .catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [mode]);
   const [featureInput, setFeatureInput] = useState("");
   const [imageUrlInput, setImageUrlInput] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -200,7 +219,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         </p>
       )}
 
-      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-6">
+      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4 sm:p-6">
         <h2 className="mb-4 font-[family-name:var(--font-display)] text-xl font-bold text-[var(--color-ink)]">
           Información básica
         </h2>
@@ -211,7 +230,13 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
           </div>
           <div>
             <label htmlFor="reference" className={labelClass}>Referencia</label>
-            <input id="reference" required value={form.reference} onChange={(e) => updateField("reference", e.target.value)} className={inputClass} placeholder="CB-2024-005" />
+            <input
+              id="reference"
+              required
+              value={form.reference}
+              onChange={(e) => updateField("reference", e.target.value)}
+              className={inputClass}
+            />
           </div>
           <div>
             <label htmlFor="slug" className={labelClass}>Slug URL (opcional)</label>
@@ -252,7 +277,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         </div>
       </section>
 
-      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-6">
+      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4 sm:p-6">
         <h2 className="mb-4 font-[family-name:var(--font-display)] text-xl font-bold text-[var(--color-ink)]">
           Ubicación
         </h2>
@@ -272,7 +297,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         </div>
       </section>
 
-      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-6">
+      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4 sm:p-6">
         <h2 className="mb-4 font-[family-name:var(--font-display)] text-xl font-bold text-[var(--color-ink)]">
           Superficie y distribución
         </h2>
@@ -330,7 +355,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         </div>
       </section>
 
-      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-6">
+      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4 sm:p-6">
         <h2 className="mb-4 font-[family-name:var(--font-display)] text-xl font-bold text-[var(--color-ink)]">
           Imágenes
         </h2>
@@ -349,8 +374,8 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
             </div>
           ))}
         </div>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <label className="cursor-pointer rounded-sm border border-[var(--color-accent)] px-4 py-2 text-sm font-semibold text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-on-accent)]">
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <label className="cursor-pointer rounded-sm border border-[var(--color-accent)] px-4 py-2 text-center text-sm font-semibold text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-on-accent)]">
             {uploading ? "Subiendo..." : "Subir imagen"}
             <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImageUpload} className="hidden" disabled={uploading} />
           </label>
@@ -359,7 +384,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
             value={imageUrlInput}
             onChange={(e) => setImageUrlInput(e.target.value)}
             placeholder="URL de imagen externa"
-            className={`${inputClass} max-w-xs`}
+            className={`${inputClass} min-w-0 sm:max-w-xs`}
           />
           <button type="button" onClick={addImageUrl} className="rounded-sm bg-[var(--color-navy)] px-4 py-2 text-sm text-[var(--color-on-navy)]">
             Añadir URL
@@ -367,7 +392,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         </div>
       </section>
 
-      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-6">
+      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4 sm:p-6">
         <h2 className="mb-4 font-[family-name:var(--font-display)] text-xl font-bold text-[var(--color-ink)]">
           Descripción y características
         </h2>
@@ -384,8 +409,8 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         </div>
         <div className="mt-4">
           <label className={labelClass}>Detalles destacados</label>
-          <div className="flex gap-2">
-            <input value={featureInput} onChange={(e) => setFeatureInput(e.target.value)} className={inputClass} placeholder="Ej: Reforma integral 2024" onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addFeature())} />
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <input value={featureInput} onChange={(e) => setFeatureInput(e.target.value)} className={`${inputClass} min-w-0`} placeholder="Ej: Reforma integral 2024" onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addFeature())} />
             <button type="button" onClick={addFeature} className="shrink-0 rounded-sm bg-[var(--color-navy)] px-4 py-2 text-sm text-[var(--color-on-navy)]">Añadir</button>
           </div>
           <ul className="mt-2 space-y-1">
@@ -399,7 +424,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         </div>
       </section>
 
-      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-6">
+      <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4 sm:p-6">
         <h2 className="mb-4 font-[family-name:var(--font-display)] text-xl font-bold text-[var(--color-ink)]">
           Publicación
         </h2>
@@ -415,7 +440,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         </div>
       </section>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <button
           type="submit"
           disabled={saving}

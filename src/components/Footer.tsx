@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LogoMark } from "@/components/LogoMark";
 import { siteConfig } from "@/lib/data";
 
 export function Footer() {
@@ -55,7 +56,7 @@ export function Footer() {
               </h3>
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="block text-sm font-medium transition-colors hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
+                className="block break-all text-sm font-medium transition-colors hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
               >
                 {siteConfig.email}
               </a>
@@ -84,7 +85,7 @@ export function Footer() {
             </p>
             <Link
               href="/valoracion"
-              className="inline-flex items-center justify-center rounded-sm bg-[var(--color-accent)] px-6 py-2.5 text-sm font-semibold uppercase tracking-wider text-[var(--color-on-accent)] transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
+              className="inline-flex w-full items-center justify-center rounded-sm bg-[var(--color-accent)] px-6 py-2.5 text-sm font-semibold uppercase tracking-wider text-[var(--color-on-accent)] transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)] sm:w-auto"
             >
               Solicitar →
             </Link>
@@ -93,9 +94,7 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-[var(--color-navy-light)] pt-8 sm:flex-row">
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-accent)]">
-              <span className="font-[family-name:var(--font-display)] text-sm font-bold text-[var(--color-accent)]">CB</span>
-            </div>
+            <LogoMark className="h-10" />
             <span className="font-[family-name:var(--font-display)] text-sm font-bold uppercase tracking-widest text-[var(--color-accent)]">
               Corral Business
             </span>

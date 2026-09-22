@@ -48,12 +48,12 @@ export function Services() {
     <section className="bg-[var(--color-paper)] py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
-          <div className="mb-4 flex items-center justify-center gap-4">
-            <span className="h-px w-16 bg-[var(--color-accent)]" />
-            <h2 className="font-[family-name:var(--font-display)] text-3xl font-bold uppercase tracking-wide text-[var(--color-ink)] sm:text-4xl">
+          <div className="mb-4 flex items-center justify-center gap-3 sm:gap-4">
+            <span className="h-px w-8 shrink-0 bg-[var(--color-accent)] sm:w-16" />
+            <h2 className="text-center font-[family-name:var(--font-display)] text-3xl font-bold uppercase tracking-wide text-[var(--color-ink)] sm:text-4xl">
               Nuestros servicios
             </h2>
-            <span className="h-px w-16 bg-[var(--color-accent)]" />
+            <span className="h-px w-8 shrink-0 bg-[var(--color-accent)] sm:w-16" />
           </div>
         </div>
 

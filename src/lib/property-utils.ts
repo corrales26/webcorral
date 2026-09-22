@@ -36,6 +36,18 @@ export function statusColor(status: PropertyStatus): string {
   return colors[status];
 }
 
+export function nextReference(existing: string[], date = new Date()): string {
+  const year = date.getFullYear();
+  const prefix = `CB-${year}-`;
+  const max = existing.reduce((highest, reference) => {
+    if (!reference.startsWith(prefix)) return highest;
+    const number = Number.parseInt(reference.slice(prefix.length), 10);
+    return Number.isFinite(number) ? Math.max(highest, number) : highest;
+  }, 0);
+
+  return `${prefix}${String(max + 1).padStart(3, "0")}`;
+}
+
 export function slugify(text: string): string {
   return text
     .toLowerCase()

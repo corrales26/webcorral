@@ -2,12 +2,17 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
+import { AdminMobileNav } from "@/components/admin/AdminMobileNav";
+import { LogoMark } from "@/components/LogoMark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navItems = [
   { href: "/admin", label: "Panel" },
   { href: "/admin/inmuebles", label: "Inmuebles" },
-  { href: "/admin/inmuebles/nuevo", label: "Nuevo inmueble" },
+  { href: "/admin/contratos", label: "Contratos" },
+  { href: "/admin/colaboraciones", label: "Colaboraciones" },
+  { href: "/admin/invitaciones", label: "Invitaciones" },
+  { href: "/admin/facturacion", label: "Facturación" },
 ];
 
 export default async function AdminDashboardLayout({
@@ -19,14 +24,23 @@ export default async function AdminDashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-[var(--color-paper)]">
+    <div className="flex min-h-screen overflow-x-hidden bg-[var(--color-paper)]">
       <aside className="hidden w-64 shrink-0 border-r border-[var(--color-rule)] bg-[var(--color-navy)] lg:block">
         <div className="flex h-full flex-col p-6">
-          <Link href="/admin" className="mb-8">
-            <p className="font-[family-name:var(--font-display)] text-lg font-bold uppercase tracking-widest text-[var(--color-accent)]">
-              Corral CMS
-            </p>
-            <p className="text-xs text-[var(--color-muted)]">Panel de administración</p>
+          <Link href="/admin" className="mb-6 flex flex-col items-center gap-3 text-center">
+            <LogoMark className="h-14" />
+            <span>
+              <p className="font-[family-name:var(--font-display)] text-lg font-bold uppercase tracking-widest text-[var(--color-accent)]">
+                Corral CMS
+              </p>
+              <p className="mt-1 text-xs text-[var(--color-muted)]">Panel de administración</p>
+            </span>
+          </Link>
+          <Link
+            href="/admin/inmuebles/nuevo"
+            className="mb-6 block rounded-md bg-[var(--color-accent)] px-3 py-3 text-center text-sm font-semibold uppercase tracking-wider text-[var(--color-on-accent)] transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
+          >
+            + Nuevo inmueble
           </Link>
           <nav className="flex-1 space-y-1">
             {navItems.map((item) => (
@@ -52,32 +66,15 @@ export default async function AdminDashboardLayout({
         </div>
       </aside>
 
-      <div className="flex flex-1 flex-col">
-        <header className="flex items-center justify-between border-b border-[var(--color-rule)] bg-[var(--color-paper-2)] px-4 py-3 lg:px-8">
-          <div className="flex items-center gap-4 lg:hidden">
-            <Link href="/admin" className="font-[family-name:var(--font-display)] text-sm font-bold text-[var(--color-accent)]">
-              CMS
-            </Link>
-            <nav className="flex gap-2 text-xs">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="text-[var(--color-ink-2)] hover:text-[var(--color-accent)]"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-          <div className="ml-auto flex items-center gap-3">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="border-b border-[var(--color-rule)] bg-[var(--color-paper-2)] px-4 py-3 lg:flex lg:items-center lg:justify-end lg:px-8">
+          <AdminMobileNav />
+          <div className="hidden items-center gap-3 lg:flex">
             <ThemeToggle />
-            <div className="hidden lg:block">
-              <AdminLogoutButton />
-            </div>
+            <AdminLogoutButton />
           </div>
         </header>
-        <main className="flex-1 p-4 lg:p-8">{children}</main>
+        <main className="min-w-0 flex-1 p-4 lg:p-8">{children}</main>
       </div>
     </div>
   );

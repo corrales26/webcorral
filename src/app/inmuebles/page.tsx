@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { PageHero, PageContent } from "@/components/PageLayout";
 import { PropertyListing } from "@/components/property/PropertyListing";
 import { getAllProperties } from "@/lib/storage/properties";
@@ -19,7 +20,9 @@ export default async function InmueblesPage() {
         subtitle="Descubre nuestra selección de propiedades en venta, alquiler y oportunidades de rehabilitación."
       />
       <PageContent>
-        <PropertyListing properties={properties} />
+        <Suspense>
+          <PropertyListing properties={properties} />
+        </Suspense>
       </PageContent>
     </>
   );

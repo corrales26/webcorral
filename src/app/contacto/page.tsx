@@ -33,7 +33,7 @@ export default function ContactoPage() {
                 <div>
                   <dt className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">Email</dt>
                   <dd className="mt-1">
-                    <a href={`mailto:${siteConfig.email}`} className="text-lg text-[var(--color-ink)] hover:text-[var(--color-accent)]">
+                    <a href={`mailto:${siteConfig.email}`} className="break-all text-lg text-[var(--color-ink)] hover:text-[var(--color-accent)]">
                       {siteConfig.email}
                     </a>
                   </dd>

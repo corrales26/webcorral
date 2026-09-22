@@ -16,10 +16,14 @@ Abre [http://localhost:3000](http://localhost:3000).
 
 | Variable | Descripción |
 |----------|-------------|
-| `ADMIN_PASSWORD` | Contraseña del panel CMS (`/admin/login`) |
-| `ADMIN_SECRET` | Secreto para firmar la sesión del CMS |
+| `ADMIN_SECRET` | Firma la cookie de sesión del admin. La contraseña del admin se guarda solo en Supabase |
+| `NEXT_PUBLIC_SUPABASE_URL` | URL del proyecto Supabase |
+| `SUPABASE_SERVICE_ROLE_KEY` | Clave service role (solo servidor, nunca en el cliente) |
+| `DATA_ENCRYPTION_KEY` | Clave AES-256 en base64 para cifrar datos sensibles |
 
 Valores por defecto en desarrollo: ver `.env.example`.
+
+Sin variables de Supabase, el CMS sigue usando `data/properties.json` en local.
 
 ### Panel CMS
 
@@ -31,19 +35,23 @@ Valores por defecto en desarrollo: ver `.env.example`.
 1. Importa el repositorio en [Vercel](https://vercel.com/new).
 2. Framework preset: **Next.js** (detección automática).
 3. Añade las variables de entorno en **Settings → Environment Variables**:
-   - `ADMIN_PASSWORD` — contraseña segura para producción
    - `ADMIN_SECRET` — cadena aleatoria larga (mín. 32 caracteres)
-4. Despliega.
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `DATA_ENCRYPTION_KEY`
+4. En Supabase, ejecuta `supabase/schema.sql` y `supabase/access.sql` en el SQL Editor. El admin y las invitaciones se crean ahí, no desde la web.
+5. Despliega.
 
-> **Nota sobre el CMS en Vercel:** el almacenamiento actual usa `data/properties.json` y `public/uploads/`. En Vercel el filesystem es efímero, por lo que los cambios del CMS **no persisten** entre despliegues. Para producción con CMS activo conviene migrar a Vercel Blob, Supabase o similar. La web pública y los inmuebles del JSON incluido en el repo sí funcionan correctamente.
+El CMS en producción lee y escribe en Supabase. Dirección, descripción, extras e imágenes se cifran con AES-256-GCM antes de guardarse. Las fotos van al bucket privado `property-images`.
 
 ## Estructura
 
 ```
 src/app/          → Rutas públicas y admin
 src/components/   → UI (hero, inmuebles, CMS)
-data/             → Inmuebles (JSON)
-public/uploads/   → Imágenes subidas por el CMS
+data/             → Inmuebles locales (respaldo sin Supabase)
+supabase/         → Esquema SQL de Postgres y Storage
+public/uploads/   → Imágenes locales si no hay Supabase
 ```
 
 ## Scripts
