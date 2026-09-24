@@ -53,8 +53,15 @@ values (
   'property-images',
   'property-images',
   true,
-  5242880,
-  array['image/jpeg', 'image/png', 'image/webp']
+  52428800,
+  array[
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'video/mp4',
+    'video/webm',
+    'video/quicktime'
+  ]
 )
 on conflict (id) do update
 set public = true,

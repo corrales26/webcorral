@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { CookieBanner } from "@/components/CookieBanner";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
@@ -18,6 +19,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
+      <CookieBanner />
     </>
   );
 }

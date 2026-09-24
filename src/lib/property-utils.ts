@@ -1,8 +1,15 @@
 import type { Property, PropertyStatus, PropertyType, PropertyCondition } from "@/lib/types/property";
 import { PROPERTY_CONDITIONS, PROPERTY_STATUSES, PROPERTY_TYPES } from "@/lib/types/property";
+import { isVideoMediaUrl } from "@/lib/media-utils";
 
 export function getCoverImage(property: Property): string {
+  const firstImage = property.images.find((url) => !isVideoMediaUrl(url));
+  if (firstImage) return firstImage;
   return property.images[0] ?? "/uploads/placeholder.jpg";
+}
+
+export function getCoverIsVideo(property: Property): boolean {
+  return isVideoMediaUrl(getCoverImage(property));
 }
 
 export function formatPrice(property: Property): string {

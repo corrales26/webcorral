@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { CONTRACT_DOCUMENT_ACCEPT } from "@/lib/document-utils";
 import { CONTRACT_TYPES, type ContractType } from "@/lib/types/contract";
 
 interface ContractFormProps {
@@ -96,16 +97,19 @@ export function ContractForm({ properties }: ContractFormProps) {
         </div>
         <div className="sm:col-span-2">
           <label htmlFor="file" className={labelClass}>
-            PDF
+            Documento
           </label>
           <input
             id="file"
             name="file"
             type="file"
-            accept="application/pdf"
+            accept={CONTRACT_DOCUMENT_ACCEPT}
             required
             className={inputClass}
           />
+          <p className="mt-1 text-xs text-[var(--color-muted)]">
+            PDF, Word (.doc, .docx), Excel (.xls, .xlsx), ODT, ODS u RTF. Máximo 10 MB.
+          </p>
         </div>
         <div className="sm:col-span-2">
           <label htmlFor="notes" className={labelClass}>

@@ -17,7 +17,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
   try {
     const image = await getSubmissionImage(id);
     if (!image) {
-      return NextResponse.json({ error: "Imagen no encontrada" }, { status: 404 });
+      return NextResponse.json({ error: "Archivo no encontrado" }, { status: 404 });
     }
 
     return new NextResponse(new Uint8Array(image.bytes), {
@@ -27,6 +27,6 @@ export async function GET(_request: Request, { params }: RouteParams) {
       },
     });
   } catch {
-    return NextResponse.json({ error: "No se pudo cargar la imagen" }, { status: 500 });
+    return NextResponse.json({ error: "No se pudo cargar el archivo" }, { status: 500 });
   }
 }

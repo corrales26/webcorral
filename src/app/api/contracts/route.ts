@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
+import { validateContractDocument } from "@/lib/document-utils";
 import { createContract } from "@/lib/storage/contracts";
 import type { ContractType } from "@/lib/types/contract";
-
-const MAX_SIZE = 10 * 1024 * 1024;
 
 export async function POST(request: Request) {
   const authed = await isAuthenticated();
@@ -29,18 +28,12 @@ export async function POST(request: Request) {
     }
 
     if (!(file instanceof File)) {
-      return NextResponse.json({ error: "Adjunta el PDF del contrato" }, { status: 400 });
+      return NextResponse.json({ error: "Adjunta el documento del contrato" }, { status: 400 });
     }
 
-    if (file.type !== "application/pdf") {
-      return NextResponse.json({ error: "El contrato debe ser un PDF" }, { status: 400 });
-    }
-
-    if (file.size > MAX_SIZE) {
-      return NextResponse.json(
-        { error: "El archivo supera el límite de 10 MB" },
-        { status: 400 }
-      );
+    const validationError = validateContractDocument(file);
+    if (validationError) {
+      return NextResponse.json({ error: validationError }, { status: 400 });
     }
 
     const contract = await createContract({

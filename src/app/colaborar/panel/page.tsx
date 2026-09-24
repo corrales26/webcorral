@@ -27,7 +27,7 @@ export default async function CollaboratorPanelPage() {
         </h1>
         <p className="mt-2 text-sm text-[var(--color-muted)]">{collaborator.email}</p>
         <p className="mt-2 text-sm text-[var(--color-muted)]">
-          Sube las fotos y el texto. Solo el administrador puede verlos.
+          Sube fotos, vídeos y texto. Solo el administrador puede verlos.
         </p>
         <section className="mt-8 rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-6">
           <CollaboratorForm />

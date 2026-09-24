@@ -122,7 +122,7 @@ values (
   'collaborator-files',
   'collaborator-files',
   false,
-  5242880,
+  52428800,
   array['application/octet-stream']
 )
 on conflict (id) do update

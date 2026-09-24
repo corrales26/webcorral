@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
+import { CookieConsentProvider } from "@/context/CookieConsentProvider";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import { SiteShell } from "@/components/SiteShell";
 import "./globals.css";
@@ -23,6 +24,14 @@ export const metadata: Metadata = {
   },
   description:
     "Especialistas en compraventa, alquiler, rehabilitación e inversión inmobiliaria en Cantabria. Tu vivienda en buenas manos.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-96x96.png", type: "image/png", sizes: "96x96" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon-96x96.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -33,9 +42,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <ThemeProvider>
-          <SiteShell>{children}</SiteShell>
-        </ThemeProvider>
+        <CookieConsentProvider>
+          <ThemeProvider>
+            <SiteShell>{children}</SiteShell>
+          </ThemeProvider>
+        </CookieConsentProvider>
       </body>
     </html>
   );

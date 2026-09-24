@@ -17,7 +17,7 @@ export default async function AdminInvitationsPage() {
         Invitaciones
       </h1>
       <p className="mt-2 text-[var(--color-muted)]">
-        Invita colaboradores por correo. Ellos entran en /colaborar con ese correo y solo pueden subir fotos y texto.
+        Invita colaboradores por correo. Ellos entran en /colaborar con ese correo y solo pueden subir fotos, vídeos y texto.
       </p>
 
       <section className="mt-8 rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4 sm:p-6">

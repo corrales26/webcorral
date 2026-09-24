@@ -3,10 +3,17 @@ export const siteConfig = {
   tagline: "Tu vivienda en buenas manos",
   phone: "942 123 456",
   whatsapp: "34600123456",
-  email: "info@corralbusiness.es",
+  email: "gestion.inmuebles@corralbusiness.com",
   address: "C/ Calderón de la Barca, 12, 39002 Santander, Cantabria",
   hours: "L-V: 9:00 - 19:00",
 };
+
+export const legalLinks = [
+  { href: "/aviso-legal", label: "Aviso legal" },
+  { href: "/politica-privacidad", label: "Política de privacidad" },
+  { href: "/politica-cookies", label: "Política de cookies" },
+  { href: "/preferencias-cookies", label: "Gestionar cookies" },
+];
 
 export const navLinks = [
   { href: "/", label: "Inicio" },

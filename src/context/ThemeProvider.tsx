@@ -7,6 +7,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useCookieConsent } from "@/context/CookieConsentProvider";
+import type { CookiePreferences } from "@/lib/cookie-consent";
 
 type Theme = "light" | "dark";
 
@@ -17,17 +19,23 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-function readTheme(): Theme {
-  if (typeof window === "undefined") return "light";
-  const stored = localStorage.getItem("theme") as Theme | null;
-  if (stored) return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+function resolveTheme(consent: CookiePreferences | null): Theme {
+  if (consent?.preferences) {
+    const stored = localStorage.getItem("theme");
+    if (stored === "light" || stored === "dark") {
+      return stored;
+    }
+  }
+  return "light";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(readTheme);
+  const { consent } = useCookieConsent();
+  const [theme, setTheme] = useState<Theme>("light");
+
+  useEffect(() => {
+    setTheme(resolveTheme(consent));
+  }, [consent]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
@@ -36,7 +44,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const toggleTheme = () => {
     setTheme((current) => {
       const next = current === "light" ? "dark" : "light";
-      localStorage.setItem("theme", next);
+      if (consent?.preferences) {
+        localStorage.setItem("theme", next);
+      }
       return next;
     });
   };

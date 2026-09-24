@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { PropertyMedia } from "@/components/media/PropertyMedia";
+import { UPLOAD_MEDIA_ACCEPT } from "@/lib/media-utils";
 import type { Property } from "@/lib/types/property";
 import {
   AMENITY_OPTIONS,
@@ -131,7 +132,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
       updateField("images", [...form.images, url]);
     } else {
       const data = await res.json();
-      setError(data.error || "Error al subir imagen");
+      setError(data.error || "Error al subir el archivo");
     }
     setUploading(false);
     e.target.value = "";
@@ -357,17 +358,17 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
 
       <section className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4 sm:p-6">
         <h2 className="mb-4 font-[family-name:var(--font-display)] text-xl font-bold text-[var(--color-ink)]">
-          Imágenes
+          Imágenes y vídeos
         </h2>
         <div className="flex flex-wrap gap-3">
           {form.images.map((image, index) => (
             <div key={`${image}-${index}`} className="relative h-24 w-32 overflow-hidden rounded-md border border-[var(--color-rule)]">
-              <Image src={image} alt="" fill className="object-cover" sizes="128px" />
+              <PropertyMedia src={image} alt="" fill className="object-cover" sizes="128px" />
               <button
                 type="button"
                 onClick={() => removeImage(index)}
                 className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs text-white"
-                aria-label="Eliminar imagen"
+                aria-label="Eliminar archivo"
               >
                 ×
               </button>
@@ -376,14 +377,20 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         </div>
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <label className="cursor-pointer rounded-sm border border-[var(--color-accent)] px-4 py-2 text-center text-sm font-semibold text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-on-accent)]">
-            {uploading ? "Subiendo..." : "Subir imagen"}
-            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImageUpload} className="hidden" disabled={uploading} />
+            {uploading ? "Subiendo..." : "Subir foto o vídeo"}
+            <input
+              type="file"
+              accept={UPLOAD_MEDIA_ACCEPT}
+              onChange={handleImageUpload}
+              className="hidden"
+              disabled={uploading}
+            />
           </label>
           <input
             type="url"
             value={imageUrlInput}
             onChange={(e) => setImageUrlInput(e.target.value)}
-            placeholder="URL de imagen externa"
+            placeholder="URL de imagen o vídeo"
             className={`${inputClass} min-w-0 sm:max-w-xs`}
           />
           <button type="button" onClick={addImageUrl} className="rounded-sm bg-[var(--color-navy)] px-4 py-2 text-sm text-[var(--color-on-navy)]">

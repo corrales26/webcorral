@@ -1,9 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { Property } from "@/lib/types/property";
+import { PropertyMedia } from "@/components/media/PropertyMedia";
 import {
   formatPrice,
   getCoverImage,
+  getCoverIsVideo,
   statusColor,
   statusLabel,
   typeLabel,
@@ -15,14 +16,17 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({ property, showTitle = false }: PropertyCardProps) {
+  const cover = getCoverImage(property);
+  const coverIsVideo = getCoverIsVideo(property);
+
   return (
     <article className="group overflow-hidden rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] transition-shadow hover:shadow-lg">
       <div className="relative aspect-[4/3] overflow-hidden">
-        <Image
-          src={getCoverImage(property)}
+        <PropertyMedia
+          src={cover}
           alt={property.title}
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className={`object-cover ${coverIsVideo ? "" : "transition-transform duration-300 group-hover:scale-105"}`}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
         <span

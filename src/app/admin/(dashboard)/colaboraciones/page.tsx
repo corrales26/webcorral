@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { PropertyMedia } from "@/components/media/PropertyMedia";
 import { getCollaboratorFeed } from "@/lib/storage/submissions";
 import { formatDate } from "@/lib/property-utils";
 
@@ -20,7 +20,7 @@ export default async function AdminCollaborationsPage() {
         Colaboraciones
       </h1>
       <p className="mt-2 text-[var(--color-muted)]">
-        Fotos y textos enviados por los colaboradores.
+        Fotos, vídeos y textos enviados por los colaboradores.
       </p>
 
       {loadError ? (
@@ -55,13 +55,12 @@ export default async function AdminCollaborationsPage() {
                     </p>
                     <div className="mt-4 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:grid-cols-3">
                       {submission.images.map((image) => (
-                        <Image
+                        <PropertyMedia
                           key={image.id}
                           src={`/api/colaboraciones/imagen/${image.id}`}
                           alt=""
-                          width={800}
-                          height={600}
-                          unoptimized
+                          contentType={image.contentType}
+                          controls
                           className="aspect-[4/3] w-full rounded-md object-cover"
                         />
                       ))}

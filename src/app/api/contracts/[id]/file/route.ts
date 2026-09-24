@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
+import { getContentTypeFromFileName } from "@/lib/document-utils";
 import { getContractFile } from "@/lib/storage/contracts";
 
 interface RouteParams {
@@ -21,10 +22,11 @@ export async function GET(_request: Request, { params }: RouteParams) {
     }
 
     const safeName = file.fileName.replace(/[\r\n"]/g, "") || "contrato.pdf";
+    const contentType = getContentTypeFromFileName(safeName);
 
     return new NextResponse(new Uint8Array(file.bytes), {
       headers: {
-        "Content-Type": "application/pdf",
+        "Content-Type": contentType,
         "Content-Disposition": `attachment; filename="${safeName}"; filename*=UTF-8''${encodeURIComponent(safeName)}`,
         "Cache-Control": "private, no-store",
       },

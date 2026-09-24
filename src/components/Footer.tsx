@@ -1,13 +1,13 @@
 import Link from "next/link";
+import { EmailAddress } from "@/components/EmailAddress";
 import { LogoMark } from "@/components/LogoMark";
-import { siteConfig } from "@/lib/data";
+import { legalLinks, siteConfig } from "@/lib/data";
 
 export function Footer() {
   return (
     <footer className="bg-[var(--color-navy)] text-[var(--color-on-navy)]">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-[1fr_auto]">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-accent)]">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="1.5" aria-hidden="true">
@@ -56,9 +56,9 @@ export function Footer() {
               </h3>
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="block break-all text-sm font-medium transition-colors hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
+                className="block text-sm font-medium transition-colors hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
               >
-                {siteConfig.email}
+                <EmailAddress email={siteConfig.email} />
               </a>
             </div>
 
@@ -74,37 +74,21 @@ export function Footer() {
               </h3>
               <p className="text-sm leading-relaxed">{siteConfig.address}</p>
             </div>
-          </div>
-
-          <div className="flex flex-col justify-center rounded-lg border-2 border-[var(--color-accent)] bg-[var(--color-navy-light)] p-6 lg:min-w-[280px]">
-            <h3 className="mb-2 font-[family-name:var(--font-display)] text-xl font-bold uppercase tracking-wide text-[var(--color-accent)]">
-              Valoración gratuita
-            </h3>
-            <p className="mb-4 text-sm text-[var(--color-on-navy)]">
-              Conoce el valor real de tu inmueble sin compromiso.
-            </p>
-            <Link
-              href="/valoracion"
-              className="inline-flex w-full items-center justify-center rounded-sm bg-[var(--color-accent)] px-6 py-2.5 text-sm font-semibold uppercase tracking-wider text-[var(--color-on-accent)] transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)] sm:w-auto"
-            >
-              Solicitar →
-            </Link>
-          </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-[var(--color-navy-light)] pt-8 sm:flex-row">
-          <Link href="/" className="flex items-center gap-2">
+        <div className="mt-12 grid grid-cols-1 items-center gap-6 border-t border-[var(--color-navy-light)] pt-8 sm:grid-cols-3">
+          <Link href="/" className="flex items-center justify-center gap-2 sm:justify-self-start">
             <LogoMark className="h-10" />
             <span className="font-[family-name:var(--font-display)] text-sm font-bold uppercase tracking-widest text-[var(--color-accent)]">
               Corral Business
             </span>
           </Link>
 
-          <p className="font-[family-name:var(--font-display)] text-lg italic text-[var(--color-accent)]">
+          <p className="text-center font-[family-name:var(--font-display)] text-lg italic text-[var(--color-accent)] sm:justify-self-center">
             Tu vivienda en buenas manos
           </p>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center gap-4 sm:justify-self-end">
             <a href="#" aria-label="Instagram" className="text-[var(--color-on-navy)] transition-colors hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                 <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
@@ -127,7 +111,22 @@ export function Footer() {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-xs text-[var(--color-muted)]">
+        <nav
+          aria-label="Enlaces legales"
+          className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs"
+        >
+          {legalLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-[var(--color-muted)] transition-colors hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        <p className="mt-4 text-center text-xs text-[var(--color-muted)]">
           © {new Date().getFullYear()} Corral Business. Todos los derechos reservados.
         </p>
       </div>

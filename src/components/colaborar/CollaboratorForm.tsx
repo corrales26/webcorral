@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { UPLOAD_MEDIA_ACCEPT } from "@/lib/media-utils";
 
 export function CollaboratorForm() {
   const [error, setError] = useState("");
@@ -57,17 +58,20 @@ export function CollaboratorForm() {
       </div>
       <div>
         <label htmlFor="files" className={labelClass}>
-          Fotos
+          Fotos y vídeos
         </label>
         <input
           id="files"
           name="files"
           type="file"
-          accept="image/jpeg,image/png,image/webp"
+          accept={UPLOAD_MEDIA_ACCEPT}
           multiple
           required
           className={inputClass}
         />
+        <p className="mt-1 text-xs text-[var(--color-muted)]">
+          JPG, PNG, WebP (hasta 5 MB) · MP4, WebM, MOV (hasta 50 MB)
+        </p>
       </div>
       <button
         type="submit"

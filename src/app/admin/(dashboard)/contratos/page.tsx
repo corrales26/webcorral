@@ -23,7 +23,7 @@ export default async function AdminContractsPage() {
         Contratos
       </h1>
       <p className="mt-2 text-[var(--color-muted)]">
-        Guarda los contratos de la agencia. El PDF y los datos del cliente se cifran antes de almacenarse.
+        Guarda los contratos de la agencia. Los documentos y los datos del cliente se cifran antes de almacenarse.
       </p>
 
       <section className="mt-8 rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4 sm:p-6">
