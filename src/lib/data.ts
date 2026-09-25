@@ -1,10 +1,11 @@
 export const siteConfig = {
   name: "Corral Business",
+  legalHolder: "JAIME CORRAL ROSEÑADA",
   tagline: "Tu vivienda en buenas manos",
   phone: "942 123 456",
   whatsapp: "34600123456",
-  email: "gestion.inmuebles@corralbusiness.com",
-  address: "C/ Calderón de la Barca, 12, 39002 Santander, Cantabria",
+  email: "gestion.inmuebles@corralbusiness.es",
+  addresses: ["C/ Carnerizas S/N, 39790 Cicero, Cantabria"],
   hours: "L-V: 9:00 - 19:00",
 };
 

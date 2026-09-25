@@ -23,7 +23,6 @@ export function Footer() {
               >
                 {siteConfig.phone}
               </a>
-              <p className="mt-1 text-sm text-[var(--color-muted)]">{siteConfig.hours}</p>
             </div>
 
             <div>
@@ -72,7 +71,13 @@ export function Footer() {
               <h3 className="mb-1 text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">
                 Oficina
               </h3>
-              <p className="text-sm leading-relaxed">{siteConfig.address}</p>
+              <div className="space-y-2">
+                {siteConfig.addresses.map((address) => (
+                  <p key={address} className="text-sm leading-relaxed">
+                    {address}
+                  </p>
+                ))}
+              </div>
             </div>
         </div>
 

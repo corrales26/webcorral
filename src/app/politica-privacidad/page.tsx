@@ -19,7 +19,7 @@ export default function PoliticaPrivacidadPage() {
           <p className="leading-relaxed">
             De conformidad con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 de
             Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD),{" "}
-            {siteConfig.name} informa a los usuarios sobre el tratamiento de sus datos personales.
+            {siteConfig.legalHolder} informa a los usuarios sobre el tratamiento de sus datos personales.
           </p>
 
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--color-ink)]">
@@ -27,10 +27,18 @@ export default function PoliticaPrivacidadPage() {
           </h2>
           <ul className="space-y-2">
             <li>
-              <strong className="text-[var(--color-ink)]">Responsable:</strong> {siteConfig.name}
+              <strong className="text-[var(--color-ink)]">Responsable:</strong>{" "}
+              {siteConfig.legalHolder}
             </li>
             <li>
-              <strong className="text-[var(--color-ink)]">Domicilio:</strong> {siteConfig.address}
+              <strong className="text-[var(--color-ink)]">Domicilio:</strong>
+              <span className="mt-1 block space-y-1">
+                {siteConfig.addresses.map((address) => (
+                  <span key={address} className="block">
+                    {address}
+                  </span>
+                ))}
+              </span>
             </li>
             <li>
               <strong className="text-[var(--color-ink)]">Correo:</strong>{" "}

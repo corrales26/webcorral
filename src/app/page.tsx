@@ -7,9 +7,9 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Services />
-      <Investors />
       <Properties />
+      <Investors />
+      <Services />
     </>
   );
 }

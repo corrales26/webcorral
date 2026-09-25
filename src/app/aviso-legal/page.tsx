@@ -25,10 +25,18 @@ export default function AvisoLegalPage() {
           </h2>
           <ul className="space-y-2">
             <li>
-              <strong className="text-[var(--color-ink)]">Denominación:</strong> {siteConfig.name}
+              <strong className="text-[var(--color-ink)]">Denominación:</strong>{" "}
+              {siteConfig.legalHolder}
             </li>
             <li>
-              <strong className="text-[var(--color-ink)]">Domicilio:</strong> {siteConfig.address}
+              <strong className="text-[var(--color-ink)]">Domicilio:</strong>
+              <span className="mt-1 block space-y-1">
+                {siteConfig.addresses.map((address) => (
+                  <span key={address} className="block">
+                    {address}
+                  </span>
+                ))}
+              </span>
             </li>
             <li>
               <strong className="text-[var(--color-ink)]">Correo electrónico:</strong>{" "}
@@ -49,7 +57,7 @@ export default function AvisoLegalPage() {
           </h2>
           <p className="leading-relaxed">
             Este sitio web tiene por objeto facilitar al público el conocimiento de las actividades
-            de {siteConfig.name} y de los servicios inmobiliarios que ofrece, así como permitir la
+            de {siteConfig.legalHolder} y de los servicios inmobiliarios que ofrece, así como permitir la
             comunicación con clientes, interesados y usuarios.
           </p>
 
@@ -77,7 +85,7 @@ export default function AvisoLegalPage() {
             Responsabilidad
           </h2>
           <p className="leading-relaxed">
-            {siteConfig.name} no se hace responsable de los daños derivados del uso del sitio web
+            {siteConfig.legalHolder} no se hace responsable de los daños derivados del uso del sitio web
             ni de la información publicada en el mismo, sin perjuicio de la responsabilidad que
             pudiera derivarse de la normativa aplicable.
           </p>

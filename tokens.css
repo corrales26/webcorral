@@ -24,6 +24,8 @@
   --color-focus: oklch(72% 0.12 75);
   --color-success: oklch(55% 0.14 145);
   --color-error: oklch(55% 0.18 25);
+  --color-featured: oklch(38% 0.1 210);
+  --color-on-featured: oklch(98% 0.005 210);
 
   /* Typography */
   --font-display: var(--font-playfair);
@@ -64,4 +66,6 @@
   --color-rule-2: oklch(32% 0.028 250);
   --color-navy: oklch(12% 0.04 250);
   --color-navy-light: oklch(18% 0.045 250);
+  --color-featured: oklch(58% 0.12 210);
+  --color-on-featured: oklch(12% 0.03 250);
 }

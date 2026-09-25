@@ -1,5 +1,13 @@
 export type PropertyStatus = "venta" | "alquiler" | "rehabilitar";
-export type PropertyType = "piso" | "chalet" | "atico" | "casa" | "local" | "terreno";
+export type PropertyType =
+  | "piso"
+  | "chalet"
+  | "atico"
+  | "casa"
+  | "local"
+  | "terreno"
+  | "garaje"
+  | "trastero";
 export type PropertyCondition = "nuevo" | "reformado" | "buen_estado" | "a_reformar";
 
 export interface Property {
@@ -51,6 +59,8 @@ export const PROPERTY_TYPES: Record<PropertyType, string> = {
   casa: "Casa",
   local: "Local comercial",
   terreno: "Terreno",
+  garaje: "Garaje",
+  trastero: "Trastero",
 };
 
 export const PROPERTY_CONDITIONS: Record<PropertyCondition, string> = {

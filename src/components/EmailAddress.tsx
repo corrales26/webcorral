@@ -3,7 +3,7 @@ interface EmailAddressProps {
   className?: string;
 }
 
-/** Evita cortes feos tipo "corralbusiness.co" + "m" en columnas estrechas. */
+/** Evita cortes feos del dominio en columnas estrechas. */
 export function EmailAddress({ email, className }: EmailAddressProps) {
   const at = email.indexOf("@");
   if (at === -1) {

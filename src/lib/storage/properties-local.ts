@@ -2,6 +2,10 @@ import { promises as fs } from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
 import type { Property, PropertyInput } from "@/lib/types/property";
+import {
+  capFeaturedProperties,
+  takeHomeHighlights,
+} from "@/lib/featured-properties";
 import { slugify } from "@/lib/property-utils";
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -37,9 +41,26 @@ export async function getAllProperties(includeUnpublished = false): Promise<Prop
   );
 }
 
-export async function getFeaturedProperties(): Promise<Property[]> {
+export async function getHomeHighlightProperties(): Promise<Property[]> {
   const properties = await getAllProperties();
-  return properties.filter((p) => p.featured).slice(0, 4);
+  return takeHomeHighlights(properties);
+}
+
+async function writeFeaturedFlag(id: string, featured: boolean): Promise<void> {
+  const properties = await readAll();
+  const index = properties.findIndex((p) => p.id === id);
+  if (index === -1) return;
+
+  properties[index] = {
+    ...properties[index],
+    featured,
+    updatedAt: new Date().toISOString(),
+  };
+  await writeAll(properties);
+}
+
+async function enforceFeaturedLimit(priorityId: string): Promise<void> {
+  await capFeaturedProperties(readAll, writeFeaturedFlag, priorityId);
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {
@@ -82,6 +103,12 @@ export async function createProperty(input: PropertyInput): Promise<Property> {
 
   properties.push(property);
   await writeAll(properties);
+
+  if (property.featured) {
+    await enforceFeaturedLimit(property.id);
+    return (await getPropertyById(property.id)) ?? property;
+  }
+
   return property;
 }
 
@@ -104,6 +131,12 @@ export async function updateProperty(
 
   properties[index] = updated;
   await writeAll(properties);
+
+  if (updated.featured) {
+    await enforceFeaturedLimit(updated.id);
+    return (await getPropertyById(updated.id)) ?? updated;
+  }
+
   return updated;
 }
 

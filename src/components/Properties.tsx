@@ -1,9 +1,17 @@
 import Link from "next/link";
 import { PropertyCard } from "@/components/property/PropertyCard";
-import { getFeaturedProperties } from "@/lib/storage/properties";
+import {
+  getAllProperties,
+  getHomeHighlightProperties,
+} from "@/lib/storage/properties";
+import { featuredBadgePropertyIds } from "@/lib/property-utils";
 
 export async function Properties() {
-  const properties = await getFeaturedProperties();
+  const [properties, allPublished] = await Promise.all([
+    getHomeHighlightProperties(),
+    getAllProperties(),
+  ]);
+  const featuredBadgeIds = featuredBadgePropertyIds(allPublished);
 
   return (
     <section className="bg-[var(--color-paper)] py-16 lg:py-24">
@@ -22,12 +30,16 @@ export async function Properties() {
 
         {properties.length === 0 ? (
           <p className="text-center text-[var(--color-muted)]">
-            No hay inmuebles destacados disponibles.
+            No hay inmuebles publicados disponibles.
           </p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {properties.map((property) => (
-              <PropertyCard key={property.id} property={property} />
+              <PropertyCard
+                key={property.id}
+                property={property}
+                showFeaturedBadge={featuredBadgeIds.has(property.id)}
+              />
             ))}
           </div>
         )}

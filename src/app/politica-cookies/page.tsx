@@ -24,6 +24,24 @@ export default function PoliticaCookiesPage() {
           </p>
 
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--color-ink)]">
+            Responsable
+          </h2>
+          <ul className="space-y-2">
+            <li>
+              <strong className="text-[var(--color-ink)]">Titular:</strong> {siteConfig.legalHolder}
+            </li>
+            <li>
+              <strong className="text-[var(--color-ink)]">Domicilio:</strong> {siteConfig.addresses[0]}
+            </li>
+            <li>
+              <strong className="text-[var(--color-ink)]">Correo:</strong>{" "}
+              <a href={`mailto:${siteConfig.email}`} className="text-[var(--color-accent)] hover:underline">
+                {siteConfig.email}
+              </a>
+            </li>
+          </ul>
+
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--color-ink)]">
             ¿Qué son las cookies?
           </h2>
           <p className="leading-relaxed">
@@ -124,7 +142,7 @@ export default function PoliticaCookiesPage() {
             <Link href="/politica-privacidad" className="text-[var(--color-accent)] hover:underline">
               Política de privacidad
             </Link>
-            . Para cualquier duda puede contactar con{" "}
+            . Para cualquier duda puede contactar con {siteConfig.legalHolder} en{" "}
             <a href={`mailto:${siteConfig.email}`} className="text-[var(--color-accent)] hover:underline">
               {siteConfig.email}
             </a>

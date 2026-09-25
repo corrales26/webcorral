@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FeaturedBadge } from "@/components/property/FeaturedBadge";
 import { getAllProperties } from "@/lib/storage/properties";
 import { formatPrice, statusLabel } from "@/lib/property-utils";
 
@@ -37,16 +38,18 @@ export default async function AdminPropertiesPage() {
             </div>
             <p className="mt-2 text-sm text-[var(--color-ink-2)]">{statusLabel(property.status)}</p>
             <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-              <span
-                className={`rounded-sm px-2 py-0.5 text-xs ${
-                  property.published
-                    ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
-                    : "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300"
-                }`}
-              >
-                {property.published ? "Publicado" : "Borrador"}
-                {property.featured ? " · ★" : ""}
-              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span
+                  className={`rounded-sm px-2 py-0.5 text-xs ${
+                    property.published
+                      ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+                      : "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300"
+                  }`}
+                >
+                  {property.published ? "Publicado" : "Borrador"}
+                </span>
+                {property.featured && <FeaturedBadge className="py-0.5" />}
+              </div>
               <span className="text-xs text-[var(--color-muted)]">{property.images.length} fotos</span>
             </div>
             <div className="mt-3 flex gap-4">
@@ -96,9 +99,7 @@ export default async function AdminPropertiesPage() {
                     {property.published ? "Publicado" : "Borrador"}
                   </span>
                   {property.featured && (
-                    <span className="ml-1 rounded-sm bg-[var(--color-accent)]/20 px-2 py-0.5 text-xs text-[var(--color-accent)]">
-                      ★
-                    </span>
+                    <FeaturedBadge className="ml-1 inline-block py-0.5" />
                   )}
                 </td>
                 <td className="px-4 py-3 text-[var(--color-muted)]">{property.images.length}</td>

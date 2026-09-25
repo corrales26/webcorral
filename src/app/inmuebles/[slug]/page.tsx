@@ -5,6 +5,7 @@ import { PageHero, PageContent } from "@/components/PageLayout";
 import { ContactForm } from "@/components/ContactForm";
 import { PropertyGallery } from "@/components/property/PropertyGallery";
 import { PropertySpecs } from "@/components/property/PropertySpecs";
+import { FeaturedBadge } from "@/components/property/FeaturedBadge";
 import { PropertyCard } from "@/components/property/PropertyCard";
 import {
   getPropertyById,
@@ -18,6 +19,7 @@ import {
   typeLabel,
   conditionLabel,
   formatDate,
+  featuredBadgePropertyIds,
 } from "@/lib/property-utils";
 
 export const revalidate = 60;
@@ -52,7 +54,12 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
     notFound();
   }
 
-  const similar = await getSimilarProperties(property);
+  const [similar, allPublished] = await Promise.all([
+    getSimilarProperties(property),
+    getAllProperties(),
+  ]);
+  const featuredBadgeIds = featuredBadgePropertyIds(allPublished);
+  const showFeaturedBadge = featuredBadgeIds.has(property.id);
 
   return (
     <>
@@ -88,6 +95,7 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
                 <span className="rounded-sm border border-[var(--color-rule)] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--color-ink-2)]">
                   {conditionLabel(property.condition)}
                 </span>
+                {showFeaturedBadge && <FeaturedBadge />}
               </div>
             </div>
 
@@ -164,7 +172,12 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
             </h2>
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {similar.map((p) => (
-                <PropertyCard key={p.id} property={p} showTitle />
+                <PropertyCard
+                  key={p.id}
+                  property={p}
+                  showTitle
+                  showFeaturedBadge={featuredBadgeIds.has(p.id)}
+                />
               ))}
             </div>
             <div className="mt-6 text-center">

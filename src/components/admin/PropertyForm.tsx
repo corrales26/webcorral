@@ -440,9 +440,20 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
             <input type="checkbox" checked={form.published} onChange={(e) => updateField("published", e.target.checked)} className="rounded border-[var(--color-rule)] text-[var(--color-accent)]" />
             Publicado en la web
           </label>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={form.featured} onChange={(e) => updateField("featured", e.target.checked)} className="rounded border-[var(--color-rule)] text-[var(--color-accent)]" />
-            Destacado en home
+          <label className="flex items-start gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={form.featured}
+              onChange={(e) => updateField("featured", e.target.checked)}
+              className="mt-0.5 rounded border-[var(--color-rule)] text-[var(--color-accent)]"
+            />
+            <span>
+              <span className="font-medium text-[var(--color-ink)]">Destacado</span>
+              <span className="mt-0.5 block text-xs text-[var(--color-muted)]">
+                Prioriza la portada (hasta 4 inmuebles) y el listado. Solo 2 muestran la
+                etiqueta «Destacado» en la web.
+              </span>
+            </span>
           </label>
         </div>
       </section>

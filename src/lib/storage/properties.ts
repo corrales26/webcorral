@@ -1,5 +1,9 @@
 import { randomUUID } from "crypto";
 import type { Property, PropertyInput } from "@/lib/types/property";
+import {
+  capFeaturedProperties,
+  takeHomeHighlights,
+} from "@/lib/featured-properties";
 import { nextReference, slugify } from "@/lib/property-utils";
 import {
   decryptJson,
@@ -161,11 +165,34 @@ export async function getAllProperties(
   return includeUnpublished ? properties : properties.filter((p) => p.published);
 }
 
-export async function getFeaturedProperties(): Promise<Property[]> {
-  if (!isSupabaseConfigured()) return localStore.getFeaturedProperties();
+export async function getHomeHighlightProperties(): Promise<Property[]> {
+  if (!isSupabaseConfigured()) return localStore.getHomeHighlightProperties();
 
   const properties = await getAllProperties();
-  return properties.filter((p) => p.featured).slice(0, 4);
+  return takeHomeHighlights(properties);
+}
+
+async function writeFeaturedFlag(id: string, featured: boolean): Promise<void> {
+  const current = await getPropertyById(id);
+  if (!current) return;
+
+  const updated: Property = {
+    ...current,
+    featured,
+    updatedAt: new Date().toISOString(),
+  };
+
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase
+    .from("properties")
+    .update(propertyToRow(updated))
+    .eq("id", current.id);
+
+  if (error) throw new Error(error.message);
+}
+
+async function enforceFeaturedLimit(priorityId: string): Promise<void> {
+  await capFeaturedProperties(readAll, writeFeaturedFlag, priorityId);
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {
@@ -230,6 +257,12 @@ export async function createProperty(input: PropertyInput): Promise<Property> {
 
   const { error } = await supabase.from("properties").insert(propertyToRow(property));
   if (error) throw new Error(error.message);
+
+  if (property.featured) {
+    await enforceFeaturedLimit(property.id);
+    return (await getPropertyById(property.id)) ?? property;
+  }
+
   return property;
 }
 
@@ -257,6 +290,12 @@ export async function updateProperty(
     .eq("id", current.id);
 
   if (error) throw new Error(error.message);
+
+  if (updated.featured) {
+    await enforceFeaturedLimit(updated.id);
+    return (await getPropertyById(updated.id)) ?? updated;
+  }
+
   return updated;
 }
 

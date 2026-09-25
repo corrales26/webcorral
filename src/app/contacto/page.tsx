@@ -13,7 +13,7 @@ export default function ContactoPage() {
     <>
       <PageHero
         title="Contacto"
-        subtitle="Estamos aquí para ayudarte. Escríbenos, llámanos o visita nuestra oficina en Santander."
+        subtitle="Estamos aquí para ayudarte. Escríbenos, llámanos o visita nuestra oficina en Cicero, Cantabria."
       />
       <PageContent>
         <div className="grid gap-12 lg:grid-cols-2">
@@ -41,7 +41,7 @@ export default function ContactoPage() {
                 </div>
                 <div>
                   <dt className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">Oficina</dt>
-                  <dd className="mt-1 text-[var(--color-ink-2)]">{siteConfig.address}</dd>
+                  <dd className="mt-1 text-[var(--color-ink-2)]">{siteConfig.addresses[0]}</dd>
                 </div>
                 <div>
                   <dt className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">Horario</dt>

@@ -38,7 +38,8 @@ export function statusColor(status: PropertyStatus): string {
     venta: "bg-[var(--color-accent)] text-[var(--color-on-accent)]",
     alquiler:
       "bg-[var(--color-navy-light)] text-[var(--color-on-navy)] border border-[var(--color-accent)]",
-    rehabilitar: "bg-orange-600 text-white",
+    rehabilitar:
+      "bg-[var(--color-featured)] text-[var(--color-on-featured)]",
   };
   return colors[status];
 }
@@ -78,6 +79,46 @@ export function getActiveAmenities(property: Property): string[] {
   return Object.entries(labels)
     .filter(([key]) => property[key as keyof Property] === true)
     .map(([, label]) => label);
+}
+
+export const FEATURED_BADGE_LIMIT = 2;
+export const HOME_HIGHLIGHT_LIMIT = 4;
+
+export function featuredBadgePropertyIds(properties: Property[]): Set<string> {
+  return new Set(
+    properties
+      .filter((property) => property.featured && property.published)
+      .sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+      )
+      .slice(0, FEATURED_BADGE_LIMIT)
+      .map((property) => property.id),
+  );
+}
+
+export function comparePropertiesForListing(
+  a: Property,
+  b: Property,
+  sort: "recent" | "price-asc" | "price-desc",
+  priorityIds?: Set<string>,
+): number {
+  const aPriority = priorityIds ? priorityIds.has(a.id) : a.featured;
+  const bPriority = priorityIds ? priorityIds.has(b.id) : b.featured;
+
+  if (aPriority !== bPriority) {
+    return aPriority ? -1 : 1;
+  }
+
+  if (sort === "price-asc") {
+    return a.price - b.price;
+  }
+
+  if (sort === "price-desc") {
+    return b.price - a.price;
+  }
+
+  return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
 }
 
 export function formatDate(date: string): string {

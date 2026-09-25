@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Property } from "@/lib/types/property";
 import { PropertyMedia } from "@/components/media/PropertyMedia";
+import { FeaturedBadge } from "@/components/property/FeaturedBadge";
 import {
   formatPrice,
   getCoverImage,
@@ -13,9 +14,14 @@ import {
 interface PropertyCardProps {
   property: Property;
   showTitle?: boolean;
+  showFeaturedBadge?: boolean;
 }
 
-export function PropertyCard({ property, showTitle = false }: PropertyCardProps) {
+export function PropertyCard({
+  property,
+  showTitle = false,
+  showFeaturedBadge = false,
+}: PropertyCardProps) {
   const cover = getCoverImage(property);
   const coverIsVideo = getCoverIsVideo(property);
 
@@ -34,6 +40,9 @@ export function PropertyCard({ property, showTitle = false }: PropertyCardProps)
         >
           {statusLabel(property.status)}
         </span>
+        {showFeaturedBadge && (
+          <FeaturedBadge className="absolute right-3 top-3" />
+        )}
         <span className="absolute bottom-3 left-3 rounded-sm bg-[var(--color-navy)]/80 px-2 py-1 text-xs text-[var(--color-on-navy)]">
           {typeLabel(property.type)}
         </span>

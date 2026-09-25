@@ -4,6 +4,10 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Property, PropertyStatus, PropertyType } from "@/lib/types/property";
 import { PROPERTY_STATUSES, PROPERTY_TYPES } from "@/lib/types/property";
+import {
+  comparePropertiesForListing,
+  featuredBadgePropertyIds,
+} from "@/lib/property-utils";
 import { PropertyCard } from "./PropertyCard";
 
 function parseStatus(value: string | null): PropertyStatus | "all" {
@@ -31,6 +35,11 @@ export function PropertyListing({ properties }: PropertyListingProps) {
   const [search, setSearch] = useState(() => searchParams.get("q") ?? "");
   const [sort, setSort] = useState<"recent" | "price-asc" | "price-desc">("recent");
 
+  const featuredBadgeIds = useMemo(
+    () => featuredBadgePropertyIds(properties),
+    [properties],
+  );
+
   const filtered = useMemo(() => {
     let result = [...properties];
 
@@ -51,14 +60,12 @@ export function PropertyListing({ properties }: PropertyListingProps) {
       );
     }
 
-    if (sort === "price-asc") {
-      result.sort((a, b) => a.price - b.price);
-    } else if (sort === "price-desc") {
-      result.sort((a, b) => b.price - a.price);
-    }
+    result.sort((a, b) =>
+      comparePropertiesForListing(a, b, sort, featuredBadgeIds),
+    );
 
     return result;
-  }, [properties, statusFilter, typeFilter, search, sort]);
+  }, [properties, statusFilter, typeFilter, search, sort, featuredBadgeIds]);
 
   return (
     <div>
@@ -141,7 +148,12 @@ export function PropertyListing({ properties }: PropertyListingProps) {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((property) => (
-            <PropertyCard key={property.id} property={property} showTitle />
+            <PropertyCard
+              key={property.id}
+              property={property}
+              showTitle
+              showFeaturedBadge={featuredBadgeIds.has(property.id)}
+            />
           ))}
         </div>
       )}
