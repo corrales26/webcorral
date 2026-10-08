@@ -1,6 +1,7 @@
 export const siteConfig = {
   name: "Corral Business",
   legalHolder: "JAIME CORRAL ROSEÑADA",
+  legalTaxId: "",
   tagline: "Tu vivienda en buenas manos",
   phone: "942 123 456",
   whatsapp: "34600123456",

@@ -25,7 +25,7 @@ export default async function AdminDashboardLayout({
 
   return (
     <div className="flex min-h-screen overflow-x-hidden bg-[var(--color-paper)]">
-      <aside className="hidden w-64 shrink-0 border-r border-[var(--color-rule)] bg-[var(--color-navy)] lg:block">
+      <aside className="hidden w-64 shrink-0 border-r border-[var(--color-rule)] bg-[var(--color-navy)] print:hidden lg:block">
         <div className="flex h-full flex-col p-6">
           <Link href="/admin" className="mb-6 flex flex-col items-center gap-3 text-center">
             <LogoMark className="h-14" />
@@ -67,14 +67,14 @@ export default async function AdminDashboardLayout({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="border-b border-[var(--color-rule)] bg-[var(--color-paper-2)] px-4 py-3 lg:flex lg:items-center lg:justify-end lg:px-8">
+        <header className="border-b border-[var(--color-rule)] bg-[var(--color-paper-2)] px-4 py-3 print:hidden lg:flex lg:items-center lg:justify-end lg:px-8">
           <AdminMobileNav />
           <div className="hidden items-center gap-3 lg:flex">
             <ThemeToggle />
             <AdminLogoutButton />
           </div>
         </header>
-        <main className="min-w-0 flex-1 p-4 lg:p-8">{children}</main>
+        <main className="min-w-0 flex-1 p-4 print:p-0 lg:p-8">{children}</main>
       </div>
     </div>
   );

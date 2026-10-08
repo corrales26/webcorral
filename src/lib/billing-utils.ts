@@ -1,4 +1,11 @@
-import type { BillingEntry, BillingTotals } from "@/lib/types/billing";
+import {
+  IRPF_RATES,
+  VAT_RATES,
+  type BillingEntry,
+  type BillingTotals,
+  type IrpfRate,
+  type VatRate,
+} from "@/lib/types/billing";
 
 export function formatCurrency(cents: number): string {
   return new Intl.NumberFormat("es-ES", {
@@ -7,6 +14,49 @@ export function formatCurrency(cents: number): string {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(cents / 100);
+}
+
+export function isVatRate(value: number): value is VatRate {
+  return (VAT_RATES as readonly number[]).includes(value);
+}
+
+export function isIrpfRate(value: number): value is IrpfRate {
+  return (IRPF_RATES as readonly number[]).includes(value);
+}
+
+export function computeInvoiceAmounts(
+  taxBaseCents: number,
+  vatRate: number,
+  irpfRate: number,
+): { vatCents: number; irpfCents: number; totalCents: number } {
+  const vatCents = Math.round((taxBaseCents * vatRate) / 100);
+  const irpfCents = Math.round((taxBaseCents * irpfRate) / 100);
+  return {
+    vatCents,
+    irpfCents,
+    totalCents: taxBaseCents + vatCents - irpfCents,
+  };
+}
+
+export function formatInvoiceDate(date: string): string {
+  const [year, month, day] = date.split("-");
+  if (!year || !month || !day) return date;
+  return `${day}/${month}/${year}`;
+}
+
+export function isCompleteInvoice(entry: BillingEntry): boolean {
+  return Boolean(
+    entry.invoiceNumber &&
+      entry.clientName &&
+      entry.clientTaxId &&
+      entry.clientAddress &&
+      entry.issuerName &&
+      entry.issuerTaxId &&
+      entry.issuerAddress &&
+      entry.taxBaseCents != null &&
+      entry.vatRate != null &&
+      entry.vatCents != null,
+  );
 }
 
 export function formatBillingDate(date: string): string {

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BillingForm } from "@/components/admin/BillingForm";
 import { DeleteBillingButton } from "@/components/admin/DeleteBillingButton";
 import {
@@ -5,6 +6,7 @@ import {
   formatBillingDate,
   formatCurrency,
 } from "@/lib/billing-utils";
+import { siteConfig } from "@/lib/data";
 import { getAllBillingEntries } from "@/lib/storage/billing";
 import { BILLING_TYPES } from "@/lib/types/billing";
 
@@ -66,7 +68,7 @@ export default async function AdminBillingPage() {
         <h2 className="mb-4 font-[family-name:var(--font-display)] text-xl font-bold text-[var(--color-ink)]">
           Nuevo movimiento
         </h2>
-        <BillingForm />
+        <BillingForm issuerTaxId={siteConfig.legalTaxId} />
       </section>
 
       {loadError ? (
@@ -92,7 +94,9 @@ export default async function AdminBillingPage() {
                     <div className="min-w-0">
                       <p className="font-medium text-[var(--color-ink)]">{entry.concept}</p>
                       <p className="mt-1 text-sm text-[var(--color-muted)]">
-                        {BILLING_TYPES[entry.type]} · {formatBillingDate(entry.entryDate)}
+                        {BILLING_TYPES[entry.type]}
+                        {entry.invoiceNumber ? ` · ${entry.invoiceNumber}` : ""} ·{" "}
+                        {formatBillingDate(entry.entryDate)}
                       </p>
                       {entry.notes && (
                         <p className="mt-2 break-words text-sm text-[var(--color-ink-2)]">
@@ -111,8 +115,16 @@ export default async function AdminBillingPage() {
                       {formatCurrency(entry.amountCents)}
                     </p>
                   </div>
-                  <div className="mt-3">
-                    <DeleteBillingButton id={entry.id} />
+                  <div className="mt-3 flex flex-wrap items-center gap-4">
+                    {entry.invoiceNumber && (
+                      <Link
+                        href={`/admin/facturacion/${entry.id}`}
+                        className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)] hover:underline"
+                      >
+                        Ver factura
+                      </Link>
+                    )}
+                    {!entry.invoiceNumber && <DeleteBillingButton id={entry.id} />}
                   </div>
                 </li>
               ))
@@ -144,7 +156,14 @@ export default async function AdminBillingPage() {
                       <td className="px-4 py-3 text-[var(--color-muted)]">
                         {formatBillingDate(entry.entryDate)}
                       </td>
-                      <td className="px-4 py-3">{BILLING_TYPES[entry.type]}</td>
+                      <td className="px-4 py-3">
+                        {BILLING_TYPES[entry.type]}
+                        {entry.invoiceNumber ? (
+                          <span className="mt-1 block text-xs text-[var(--color-muted)]">
+                            {entry.invoiceNumber}
+                          </span>
+                        ) : null}
+                      </td>
                       <td className="px-4 py-3 font-medium">{entry.concept}</td>
                       <td
                         className={`px-4 py-3 font-medium ${
@@ -160,7 +179,17 @@ export default async function AdminBillingPage() {
                         {entry.notes ?? "—"}
                       </td>
                       <td className="px-4 py-3">
-                        <DeleteBillingButton id={entry.id} />
+                        <div className="flex flex-wrap items-center gap-3">
+                          {entry.invoiceNumber && (
+                            <Link
+                              href={`/admin/facturacion/${entry.id}`}
+                              className="text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)] hover:underline"
+                            >
+                              Factura
+                            </Link>
+                          )}
+                          {!entry.invoiceNumber && <DeleteBillingButton id={entry.id} />}
+                        </div>
                       </td>
                     </tr>
                   ))
