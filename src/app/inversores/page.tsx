@@ -28,6 +28,13 @@ function FeatureIcon({ icon }: { icon: string }) {
         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
       </svg>
     ),
+    store: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+        <path d="M3 9h18l-1.5 11h-15L3 9Z" />
+        <path d="M3 9 6 3h12l3 6" />
+        <path d="M9 21v-6h6v6" />
+      </svg>
+    ),
   };
   return icons[icon] ?? icons.search;
 }
@@ -37,17 +44,19 @@ export default function InversoresPage() {
     <>
       <PageHero
         title="Inversores"
-        subtitle="Juntos, multiplicamos resultados. Asóciate con nosotros para invertir en el mercado inmobiliario cantábrico."
+        subtitle="Encontramos Oportunidades. Creamos Valor."
       />
       <PageContent>
         <div className="grid gap-12 lg:grid-cols-2">
           <div className="space-y-6">
             <p className="text-lg leading-relaxed text-[var(--color-ink-2)]">
-              En Corral Business identificamos oportunidades inmobiliarias con potencial de
-              revalorización. Nos encargamos de la rehabilitación con calidad y gestionamos la
-              venta o alquiler para maximizar tu retorno de inversión.
+              Seleccionamos propiedades con potencial y gestionamos todo el proceso, desde la
+              adquisición y rehabilitación hasta su venta o alquiler.
             </p>
-            <div className="grid gap-6 sm:grid-cols-3">
+            <p className="text-lg leading-relaxed text-[var(--color-ink-2)]">
+              Tú decides dónde invertir. Nosotros buscamos y creamos la oportunidad.
+            </p>
+            <div className="grid gap-6 grid-cols-2">
               {investorFeatures.map((feature) => (
                 <div key={feature.label} className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-2)] p-4 text-center">
                   <div className="mb-2 inline-flex text-[var(--color-accent)]">
@@ -58,6 +67,14 @@ export default function InversoresPage() {
                   </p>
                 </div>
               ))}
+            </div>
+            <div>
+              <h2 className="font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--color-ink)]">
+                Emprendimiento
+              </h2>
+              <p className="mt-3 leading-relaxed text-[var(--color-ink-2)]">
+                Buscamos el Local adecuado para que puedas poner en marcha tu negocio.
+              </p>
             </div>
             <ul className="space-y-3 text-[var(--color-ink-2)]">
               <li className="flex items-start gap-3">

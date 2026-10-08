@@ -9,21 +9,17 @@ export default function QuienesSomosPage() {
   return (
     <>
       <PageHero
-        title="Quiénes somos"
-        subtitle="Una inmobiliaria de confianza en Cantabria, comprometida con hacer real tu proyecto inmobiliario."
+        title="¿Quiénes somos?"
+        subtitle="Somos Corral Business, una forma diferente de entender el sector inmobiliario."
       />
       <PageContent narrow>
         <div className="prose-custom space-y-6 text-[var(--color-ink-2)]">
           <p className="text-lg leading-relaxed">
-            En <strong className="text-[var(--color-ink)]">Corral Business</strong> llevamos años
-            acompañando a familias, propietarios e inversores en Cantabria y Asturias. Nuestra
-            filosofía se basa en la transparencia, la atención personalizada y el compromiso total
-            con cada cliente.
+            No nos limitamos a ofrecerte opciones. Buscamos oportunidades, analizamos posibilidades
+            y encontramos soluciones adaptadas a cada situación.
           </p>
           <p className="leading-relaxed">
-            Somos especialistas en compraventa, alquiler, rehabilitación de viviendas e inversión
-            inmobiliaria. Conocemos el mercado local y trabajamos para maximizar el valor de cada
-            operación, ya sea que quieras vender, comprar, alquilar o invertir.
+            Tú nos cuentas qué necesitas. Nosotros nos ponemos a trabajar para conseguirlo.
           </p>
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--color-ink)]">
             Nuestros valores

@@ -11,7 +11,7 @@ export default function QuieroVenderPage() {
     <>
       <PageHero
         title="Quiero vender"
-        subtitle="Te ayudamos a vender tu propiedad al mejor precio con un proceso transparente y personalizado."
+        subtitle="Convertimos tu vivienda en una Oportunidad."
       />
       <PageContent narrow>
         <ContactForm

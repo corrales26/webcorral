@@ -160,5 +160,6 @@ export async function getPropertyStats() {
     venta: properties.filter((p) => p.status === "venta").length,
     alquiler: properties.filter((p) => p.status === "alquiler").length,
     rehabilitar: properties.filter((p) => p.status === "rehabilitar").length,
+    vendida: properties.filter((p) => p.status === "vendida").length,
   };
 }

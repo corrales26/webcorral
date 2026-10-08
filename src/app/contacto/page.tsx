@@ -12,8 +12,8 @@ export default function ContactoPage() {
   return (
     <>
       <PageHero
-        title="Contacto"
-        subtitle="Estamos aquí para ayudarte. Escríbenos, llámanos o visita nuestra oficina en Cicero, Cantabria."
+        title="Háblanos"
+        subtitle="Tu proyecto inmobiliario empieza con una buena conversación. Cuéntanos qué necesitas y trabajamos para ti."
       />
       <PageContent>
         <div className="grid gap-12 lg:grid-cols-2">

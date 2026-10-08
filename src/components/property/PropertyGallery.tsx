@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { PropertyMedia } from "@/components/media/PropertyMedia";
+import { SoldStamp } from "@/components/property/SoldStamp";
 import { isVideoMediaUrl } from "@/lib/media-utils";
 
 interface PropertyGalleryProps {
   images: string[];
   title: string;
+  sold?: boolean;
 }
 
-export function PropertyGallery({ images, title }: PropertyGalleryProps) {
+export function PropertyGallery({ images, title, sold = false }: PropertyGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const gallery = images.length > 0 ? images : ["/uploads/placeholder.jpg"];
   const activeSrc = gallery[activeIndex];
@@ -26,6 +28,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
           priority
           controls={isVideoMediaUrl(activeSrc)}
         />
+        {sold && <SoldStamp size="detail" />}
         {gallery.length > 1 && (
           <>
             <button
@@ -34,7 +37,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
                 setActiveIndex((i) => (i === 0 ? gallery.length - 1 : i - 1))
               }
               aria-label="Anterior"
-              className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--color-navy)]/80 text-[var(--color-on-navy)] transition-colors hover:bg-[var(--color-navy)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
+              className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--color-navy)]/80 text-[var(--color-on-navy)] transition-colors hover:bg-[var(--color-navy)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
             >
               ‹
             </button>
@@ -44,11 +47,11 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
                 setActiveIndex((i) => (i === gallery.length - 1 ? 0 : i + 1))
               }
               aria-label="Siguiente"
-              className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--color-navy)]/80 text-[var(--color-on-navy)] transition-colors hover:bg-[var(--color-navy)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
+              className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--color-navy)]/80 text-[var(--color-on-navy)] transition-colors hover:bg-[var(--color-navy)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
             >
               ›
             </button>
-            <span className="absolute bottom-3 right-3 z-10 rounded-sm bg-[var(--color-navy)]/80 px-2 py-1 text-xs text-[var(--color-on-navy)]">
+            <span className="absolute bottom-3 right-3 z-20 rounded-sm bg-[var(--color-navy)]/80 px-2 py-1 text-xs text-[var(--color-on-navy)]">
               {activeIndex + 1} / {gallery.length}
             </span>
           </>

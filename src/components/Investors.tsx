@@ -23,6 +23,13 @@ function FeatureIcon({ icon }: { icon: string }) {
         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
       </svg>
     ),
+    store: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+        <path d="M3 9h18l-1.5 11h-15L3 9Z" />
+        <path d="M3 9 6 3h12l3 6" />
+        <path d="M9 21v-6h6v6" />
+      </svg>
+    ),
   };
   return icons[icon] ?? icons.search;
 }
@@ -45,17 +52,19 @@ export function Investors() {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
             <h2 className="font-[family-name:var(--font-display)] text-3xl font-bold uppercase leading-tight text-[var(--color-on-navy)] sm:text-4xl">
-              Trabajamos con inversores —{" "}
+              Detectamos oportunidades,{" "}
               <span className="text-[var(--color-accent)]">
-                juntos, multiplicamos resultados
+                tú decides dónde invertir
               </span>
             </h2>
             <p className="mt-6 text-base leading-relaxed text-[var(--color-on-navy)]/85">
-              Buscamos oportunidades inmobiliarias con potencial de revalorización en Cantabria y Asturias.
-              Nos asociamos contigo para rehabilitar con calidad, maximizar el valor y gestionar la venta o alquiler del inmueble.
+              <span className="mb-2 block font-semibold text-[var(--color-on-navy)]">
+                ¿Quieres emprender un negocio?
+              </span>
+              Buscamos el Local adecuado para hacerlo realidad.
             </p>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-3">
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {investorFeatures.map((feature) => (
                 <div key={feature.label} className="text-center sm:text-left">
                   <div className="mb-2 inline-flex text-[var(--color-accent)]">

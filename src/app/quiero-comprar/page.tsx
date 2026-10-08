@@ -11,7 +11,7 @@ export default function QuieroComprarPage() {
     <>
       <PageHero
         title="Quiero comprar"
-        subtitle="Encuentra la vivienda perfecta con el acompañamiento de nuestros expertos inmobiliarios."
+        subtitle="Encontramos la vivienda que necesitas. Te acompañamos hasta encontrarla."
       />
       <PageContent narrow>
         <ContactForm

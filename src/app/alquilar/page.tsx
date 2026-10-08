@@ -11,7 +11,7 @@ export default function AlquilarPage() {
     <>
       <PageHero
         title="Alquilar"
-        subtitle="Ya seas propietario o inquilino, gestionamos el alquiler de forma integral y profesional."
+        subtitle="Encontramos el Alquiler que encaja contigo. Nos ocupamos de todo el proceso."
       />
       <PageContent narrow>
         <ContactForm

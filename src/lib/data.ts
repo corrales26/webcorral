@@ -80,5 +80,6 @@ export const services = [
 export const investorFeatures = [
   { icon: "search", label: "Buscamos oportunidades" },
   { icon: "hammer", label: "Rehabilitamos con calidad" },
-  { icon: "value", label: "Generamos valor" },
+  { icon: "value", label: "Creamos valor" },
+  { icon: "store", label: "Ayudamos a emprender" },
 ];

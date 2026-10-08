@@ -25,6 +25,15 @@ export function statusLabel(status: PropertyStatus): string {
   return PROPERTY_STATUSES[status];
 }
 
+export function isPropertySold(status: PropertyStatus): boolean {
+  return status === "vendida";
+}
+
+export function availabilityLabel(status: PropertyStatus): string {
+  if (status === "vendida") return "No disponible";
+  return PROPERTY_STATUSES[status];
+}
+
 export function typeLabel(type: PropertyType): string {
   return PROPERTY_TYPES[type];
 }
@@ -40,6 +49,7 @@ export function statusColor(status: PropertyStatus): string {
       "bg-[var(--color-navy-light)] text-[var(--color-on-navy)] border border-[var(--color-accent)]",
     rehabilitar:
       "bg-[var(--color-featured)] text-[var(--color-on-featured)]",
+    vendida: "bg-[var(--color-ink)] text-[var(--color-paper)]",
   };
   return colors[status];
 }

@@ -1,4 +1,4 @@
-export type PropertyStatus = "venta" | "alquiler" | "rehabilitar";
+export type PropertyStatus = "venta" | "alquiler" | "rehabilitar" | "vendida";
 export type PropertyType =
   | "piso"
   | "chalet"
@@ -74,6 +74,7 @@ export const PROPERTY_STATUSES: Record<PropertyStatus, string> = {
   venta: "En venta",
   alquiler: "En alquiler",
   rehabilitar: "Para rehabilitar",
+  vendida: "Vendida",
 };
 
 export const AMENITY_OPTIONS = [

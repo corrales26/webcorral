@@ -250,6 +250,9 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
                 <option key={k} value={k}>{v}</option>
               ))}
             </select>
+            <p className="mt-1 text-xs text-[var(--color-muted)]">
+              Vendida sigue publicada en la web, con cartel de no disponible.
+            </p>
           </div>
           <div>
             <label htmlFor="type" className={labelClass}>Tipo</label>
