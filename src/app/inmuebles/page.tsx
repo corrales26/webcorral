@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Inmuebles",
 };
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function InmueblesPage() {
   const properties = await getAllProperties();

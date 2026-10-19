@@ -23,7 +23,7 @@ import {
   featuredBadgePropertyIds,
 } from "@/lib/property-utils";
 
-export const revalidate = 60;
+export const revalidate = 0;
 export const dynamicParams = true;
 
 interface PropertyPageProps {

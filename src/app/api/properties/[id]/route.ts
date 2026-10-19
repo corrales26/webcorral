@@ -5,6 +5,7 @@ import {
   getPropertyById,
   updateProperty,
 } from "@/lib/storage/properties";
+import { revalidatePublicProperties } from "@/lib/revalidate-public";
 import type { PropertyInput } from "@/lib/types/property";
 
 interface RouteParams {
@@ -45,6 +46,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Inmueble no encontrado" }, { status: 404 });
     }
 
+    revalidatePublicProperties();
     return NextResponse.json(property);
   } catch {
     return NextResponse.json(
@@ -67,5 +69,6 @@ export async function DELETE(_request: Request, { params }: RouteParams) {
     return NextResponse.json({ error: "Inmueble no encontrado" }, { status: 404 });
   }
 
+  revalidatePublicProperties();
   return NextResponse.json({ success: true });
 }

@@ -5,6 +5,7 @@ import {
   getAllProperties,
   getNextReference,
 } from "@/lib/storage/properties";
+import { revalidatePublicProperties } from "@/lib/revalidate-public";
 import type { PropertyInput } from "@/lib/types/property";
 
 export async function GET(request: Request) {
@@ -42,6 +43,7 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as PropertyInput;
     const property = await createProperty(body);
+    revalidatePublicProperties();
     return NextResponse.json(property, { status: 201 });
   } catch {
     return NextResponse.json(
