@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHero, PageContent } from "@/components/PageLayout";
 import { ContactForm } from "@/components/ContactForm";
@@ -55,22 +54,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
         backLabel="Volver a servicios"
       />
       <PageContent>
-        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
-          <div className="space-y-6">
-            {!isRehabilitacion && (
-              <p className="text-lg leading-relaxed text-[var(--color-ink-2)]">
-                En Corral Business ofrecemos un servicio de {service.title.toLowerCase()} integral,
-                adaptado a las necesidades de cada cliente. Nuestro equipo te acompañará en cada paso
-                del proceso con transparencia y profesionalidad.
-              </p>
-            )}
-            <Link
-              href="/servicios"
-              className="inline-flex items-center gap-1 text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
-            >
-              Ver todos los servicios →
-            </Link>
-          </div>
+        <div className="mx-auto w-full max-w-3xl">
           <ContactForm
             title={`Solicitar ${service.title.toLowerCase()}`}
             description="Déjanos tus datos y te contactaremos para explicarte cómo podemos ayudarte."
