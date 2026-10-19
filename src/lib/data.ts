@@ -38,42 +38,42 @@ export const services = [
     icon: "key",
     title: "Alquiler",
     description:
-      "Gestión integral de alquileres con selección de inquilinos, contratos y seguimiento continuo.",
+      "Gestión de alquiler con total tranquilidad. Seleccionamos a los inquilinos adecuados, redactamos las garantías contractuales y gestionamos tu propiedad de principio a fin.",
     href: "/servicios/alquiler",
   },
   {
     icon: "home",
     title: "Compraventa",
     description:
-      "Acompañamiento completo en la compra o venta de tu vivienda con valoración profesional.",
+      "El impulso que necesitas para compra o vender. Te acompañamos durante todo el proceso con valoraciones precisas y un asesoramiento claro para que tomes la mejor decisión.",
     href: "/servicios/compraventa",
   },
   {
     icon: "tag",
-    title: "Venta directa",
+    title: "Locales y Emprendimiento",
     description:
-      "Compramos tu inmueble de forma ágil y transparente, sin intermediarios innecesarios.",
+      "El primer paso para tu negocio. Te ayudamos a encontrar el espacio comercial perfecto para dar vida a tu negocio empresarial y empezar a crecer.",
     href: "/servicios/venta-directa",
   },
   {
     icon: "hammer",
     title: "Para rehabilitar",
     description:
-      "Identificamos oportunidades de inversión en inmuebles con potencial de reforma y revalorización.",
+      "Oportunidades con gran potencial. Identificamos inmuebles con posibilidades de reforma y alta revalorización para convertir proyectos en valor real.",
     href: "/servicios/rehabilitacion",
   },
   {
     icon: "trending",
     title: "Inversión inmobiliaria",
     description:
-      "Asesoramiento estratégico para maximizar el retorno de tu capital en el mercado cantábrico.",
+      "Estrategias para maximizar tu capital. Asesoramiento especializado para rentabilizar tu inversión con seguridad en el mercado inmobiliario.",
     href: "/servicios/inversion",
   },
   {
     icon: "paint",
-    title: "Rehabilitación de viviendas",
+    title: "Valoración tu inmueble",
     description:
-      "Reformamos tu propiedad con calidad y la preparamos para sacarla al mercado con el mejor valor.",
+      "Descubre el valor real de tu propiedad. Analizamos el mercado actual para ofrecerte un informe preciso y sin compromiso. Envíanos los datos del inmueble y nos pondremos en contacto.",
     href: "/servicios/reforma",
   },
 ];

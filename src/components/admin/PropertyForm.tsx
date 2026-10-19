@@ -251,7 +251,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
               ))}
             </select>
             <p className="mt-1 text-xs text-[var(--color-muted)]">
-              Vendida sigue publicada en la web, con cartel de no disponible.
+              Vendida, alquilada y reservada siguen publicadas con cartel de no disponible. Próximamente deja ver las fotos, para promociones que aún no han empezado.
             </p>
           </div>
           <div>

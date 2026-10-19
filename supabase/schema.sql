@@ -11,7 +11,7 @@ create table if not exists public.properties (
   province text not null,
   price integer not null,
   price_label text,
-  status text not null check (status in ('venta', 'alquiler', 'rehabilitar', 'vendida')),
+  status text not null check (status in ('venta', 'alquiler', 'rehabilitar', 'vendida', 'alquilada', 'reservada', 'proximamente')),
   type text not null check (type in ('piso', 'chalet', 'atico', 'casa', 'local', 'terreno', 'garaje', 'trastero')),
   condition text not null check (condition in ('nuevo', 'reformado', 'buen_estado', 'a_reformar')),
   bedrooms integer not null default 0,

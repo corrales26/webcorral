@@ -161,5 +161,8 @@ export async function getPropertyStats() {
     alquiler: properties.filter((p) => p.status === "alquiler").length,
     rehabilitar: properties.filter((p) => p.status === "rehabilitar").length,
     vendida: properties.filter((p) => p.status === "vendida").length,
+    alquilada: properties.filter((p) => p.status === "alquilada").length,
+    reservada: properties.filter((p) => p.status === "reservada").length,
+    proximamente: properties.filter((p) => p.status === "proximamente").length,
   };
 }

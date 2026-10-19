@@ -30,22 +30,40 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
     notFound();
   }
 
+  const isRehabilitacion = slug === "rehabilitacion";
+
   return (
     <>
       <PageHero
-        title={service.title}
-        subtitle={service.description}
+        title={
+          isRehabilitacion ? (
+            <>
+              Rehabilitamos tu vivienda
+              <br />
+              Transformamos tu inmueble en una nueva oportunidad
+            </>
+          ) : (
+            service.title
+          )
+        }
+        subtitle={
+          isRehabilitacion
+            ? "Estudiamos el potencial del inmueble y te ofrecemos soluciones para sacarle el mayor partido, proyecto adaptado a las posibilidades."
+            : service.description
+        }
         backHref="/servicios"
         backLabel="Volver a servicios"
       />
       <PageContent>
         <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
           <div className="space-y-6">
-            <p className="text-lg leading-relaxed text-[var(--color-ink-2)]">
-              En Corral Business ofrecemos un servicio de {service.title.toLowerCase()} integral,
-              adaptado a las necesidades de cada cliente. Nuestro equipo te acompañará en cada paso
-              del proceso con transparencia y profesionalidad.
-            </p>
+            {!isRehabilitacion && (
+              <p className="text-lg leading-relaxed text-[var(--color-ink-2)]">
+                En Corral Business ofrecemos un servicio de {service.title.toLowerCase()} integral,
+                adaptado a las necesidades de cada cliente. Nuestro equipo te acompañará en cada paso
+                del proceso con transparencia y profesionalidad.
+              </p>
+            )}
             <Link
               href="/servicios"
               className="inline-flex items-center gap-1 text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"

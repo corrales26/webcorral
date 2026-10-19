@@ -1,17 +1,22 @@
 interface SoldStampProps {
+  title: string;
   className?: string;
   size?: "card" | "detail";
 }
 
-export function SoldStamp({ className = "", size = "card" }: SoldStampProps) {
+export function SoldStamp({ title, className = "", size = "card" }: SoldStampProps) {
   const seal =
     size === "detail"
       ? "h-48 w-48 sm:h-56 sm:w-56"
       : "aspect-square h-[58%] w-auto min-h-[6.75rem] max-h-44";
-  const title =
+  const titleSize =
     size === "detail"
-      ? "text-4xl sm:text-5xl"
-      : "text-3xl leading-none";
+      ? title.length > 8
+        ? "text-3xl sm:text-4xl"
+        : "text-4xl sm:text-5xl"
+      : title.length > 8
+        ? "text-2xl leading-none"
+        : "text-3xl leading-none";
   const caption = size === "detail" ? "text-[10px] tracking-[0.32em]" : "text-[7px] tracking-[0.22em]";
 
   return (
@@ -25,8 +30,8 @@ export function SoldStamp({ className = "", size = "card" }: SoldStampProps) {
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
           <span className="mb-1 block h-px w-8 bg-[var(--color-accent)]" />
-          <p className={`font-[family-name:var(--font-display)] italic text-[var(--color-on-navy)] ${title}`}>
-            Vendida
+          <p className={`font-[family-name:var(--font-display)] italic text-[var(--color-on-navy)] ${titleSize}`}>
+            {title}
           </p>
           <span className="mt-1 block h-px w-8 bg-[var(--color-accent)]" />
           <p className={`mt-1.5 font-semibold uppercase text-[var(--color-accent)] ${caption}`}>

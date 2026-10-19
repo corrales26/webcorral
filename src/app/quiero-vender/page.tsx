@@ -10,8 +10,8 @@ export default function QuieroVenderPage() {
   return (
     <>
       <PageHero
-        title="Quiero vender"
-        subtitle="Convertimos tu vivienda en una Oportunidad."
+        title="Convertimos tu vivienda en una oportunidad"
+        subtitle="Te acompañamos en todo el proceso de venta, con una estrategia y adaptada a tu inmueble sin complicaciones ni ataduras."
       />
       <PageContent narrow>
         <ContactForm

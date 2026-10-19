@@ -13,10 +13,10 @@ import {
   getSimilarProperties,
 } from "@/lib/storage/properties";
 import {
-  availabilityLabel,
+  closedStampTitle,
   formatPrice,
-  isPropertySold,
   statusColor,
+  statusLabel,
   typeLabel,
   conditionLabel,
   formatDate,
@@ -61,7 +61,8 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
   ]);
   const featuredBadgeIds = featuredBadgePropertyIds(allPublished);
   const showFeaturedBadge = featuredBadgeIds.has(property.id);
-  const sold = isPropertySold(property.status);
+  const stampTitle = closedStampTitle(property.status);
+  const comingSoon = property.status === "proximamente";
 
   return (
     <>
@@ -74,7 +75,7 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
       <PageContent>
         <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
           <div className="min-w-0 space-y-8">
-            <PropertyGallery images={property.images} title={property.title} sold={sold} />
+            <PropertyGallery images={property.images} title={property.title} stampTitle={stampTitle ?? undefined} />
 
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div className="min-w-0">
@@ -89,7 +90,7 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
                 <span
                   className={`rounded-sm px-3 py-1 text-xs font-semibold uppercase tracking-wider ${statusColor(property.status)}`}
                 >
-                  {availabilityLabel(property.status)}
+                  {statusLabel(property.status)}
                 </span>
                 <span className="rounded-sm border border-[var(--color-rule)] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--color-ink-2)]">
                   {typeLabel(property.type)}
@@ -158,13 +159,25 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
 
           <div className="min-w-0 lg:sticky lg:top-24 lg:self-start">
             <ContactForm
-              title={sold ? "Inmueble vendido" : "Solicitar información"}
-              description={
-                sold
-                  ? `Este inmueble en ${property.location} ya no está disponible. Cuéntanos qué buscas y te ayudamos a encontrar otro.`
-                  : `¿Te interesa este inmueble en ${property.location}? Déjanos tus datos y te contactaremos.`
+              title={
+                property.status === "vendida"
+                  ? "Inmueble vendido"
+                  : property.status === "alquilada"
+                    ? "Inmueble alquilado"
+                    : property.status === "reservada"
+                      ? "Inmueble reservado"
+                      : comingSoon
+                        ? "Promoción próximamente"
+                        : "Solicitar información"
               }
-              submitLabel={sold ? "Contactar" : "Solicitar visita"}
+              description={
+                stampTitle
+                  ? `Este inmueble en ${property.location} ya no está disponible. Cuéntanos qué buscas y te ayudamos a encontrar otro.`
+                  : comingSoon
+                    ? `Esta promoción en ${property.location} todavía no ha comenzado. Déjanos tus datos y te avisamos.`
+                    : `¿Te interesa este inmueble en ${property.location}? Déjanos tus datos y te contactaremos.`
+              }
+              submitLabel={stampTitle || comingSoon ? "Contactar" : "Solicitar visita"}
               propertyRef={property.reference}
               propertyTitle={property.title}
             />

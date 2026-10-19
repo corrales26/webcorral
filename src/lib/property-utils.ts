@@ -25,13 +25,11 @@ export function statusLabel(status: PropertyStatus): string {
   return PROPERTY_STATUSES[status];
 }
 
-export function isPropertySold(status: PropertyStatus): boolean {
-  return status === "vendida";
-}
-
-export function availabilityLabel(status: PropertyStatus): string {
-  if (status === "vendida") return "No disponible";
-  return PROPERTY_STATUSES[status];
+export function closedStampTitle(status: PropertyStatus): string | null {
+  if (status === "vendida") return "Vendida";
+  if (status === "alquilada") return "Alquilada";
+  if (status === "reservada") return "Reservada";
+  return null;
 }
 
 export function typeLabel(type: PropertyType): string {
@@ -50,6 +48,9 @@ export function statusColor(status: PropertyStatus): string {
     rehabilitar:
       "bg-[var(--color-featured)] text-[var(--color-on-featured)]",
     vendida: "bg-[var(--color-ink)] text-[var(--color-paper)]",
+    alquilada: "bg-[var(--color-ink)] text-[var(--color-paper)]",
+    reservada: "bg-[var(--color-navy)] text-[var(--color-on-navy)]",
+    proximamente: "bg-[var(--color-accent)] text-[var(--color-on-accent)]",
   };
   return colors[status];
 }

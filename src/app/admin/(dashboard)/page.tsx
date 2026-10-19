@@ -44,6 +44,9 @@ export default async function AdminDashboardPage() {
           { label: "En alquiler", value: stats.alquiler },
           { label: "Para rehabilitar", value: stats.rehabilitar },
           { label: "Vendidas", value: stats.vendida },
+          { label: "Alquiladas", value: stats.alquilada },
+          { label: "Reservadas", value: stats.reservada },
+          { label: "Próximamente", value: stats.proximamente },
         ].map((stat) => (
           <div
             key={stat.label}

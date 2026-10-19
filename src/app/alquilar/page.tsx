@@ -11,7 +11,7 @@ export default function AlquilarPage() {
     <>
       <PageHero
         title="Alquilar"
-        subtitle="Encontramos el Alquiler que encaja contigo. Nos ocupamos de todo el proceso."
+        subtitle="Encontramos el Alquiler que necesitas. Nos ocupamos de todo el proceso."
       />
       <PageContent narrow>
         <ContactForm

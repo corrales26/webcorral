@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 interface PageHeroProps {
-  title: string;
-  subtitle?: string;
+  title: React.ReactNode;
+  subtitle?: React.ReactNode;
   backHref?: string;
   backLabel?: string;
 }

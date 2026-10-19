@@ -8,10 +8,10 @@ import { isVideoMediaUrl } from "@/lib/media-utils";
 interface PropertyGalleryProps {
   images: string[];
   title: string;
-  sold?: boolean;
+  stampTitle?: string;
 }
 
-export function PropertyGallery({ images, title, sold = false }: PropertyGalleryProps) {
+export function PropertyGallery({ images, title, stampTitle }: PropertyGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const gallery = images.length > 0 ? images : ["/uploads/placeholder.jpg"];
   const activeSrc = gallery[activeIndex];
@@ -28,7 +28,7 @@ export function PropertyGallery({ images, title, sold = false }: PropertyGallery
           priority
           controls={isVideoMediaUrl(activeSrc)}
         />
-        {sold && <SoldStamp size="detail" />}
+        {stampTitle && <SoldStamp title={stampTitle} size="detail" />}
         {gallery.length > 1 && (
           <>
             <button
