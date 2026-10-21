@@ -6,8 +6,19 @@ const SESSION_COOKIE = "cb_admin_session";
 const COLLABORATOR_COOKIE = "cb_collaborator_session";
 const SESSION_DURATION_MS = 24 * 60 * 60 * 1000;
 
+const DEV_SECRET = "corral-business-dev-secret";
+const PLACEHOLDER_SECRETS = new Set([
+  DEV_SECRET,
+  "cambia-este-secreto-en-produccion",
+]);
+
 function getSecret(): string {
-  return process.env.ADMIN_SECRET || "corral-business-dev-secret";
+  const secret = process.env.ADMIN_SECRET?.trim();
+  if (secret && !PLACEHOLDER_SECRETS.has(secret)) return secret;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("Falta un ADMIN_SECRET propio en producción");
+  }
+  return DEV_SECRET;
 }
 
 function signToken(payload: string): string {

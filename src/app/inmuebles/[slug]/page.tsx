@@ -15,6 +15,7 @@ import {
 import {
   closedStampTitle,
   formatPrice,
+  getCoverImage,
   statusColor,
   statusLabel,
   typeLabel,
@@ -22,6 +23,7 @@ import {
   formatDate,
   featuredBadgePropertyIds,
 } from "@/lib/property-utils";
+import { getSiteUrl } from "@/lib/site-url";
 
 export const revalidate = 0;
 export const dynamicParams = true;
@@ -41,9 +43,25 @@ export async function generateMetadata({
   const { slug } = await params;
   const property = await getPropertyById(slug);
   if (!property) return { title: "Inmueble no encontrado" };
+
+  const description = property.description.replace(/\s+/g, " ").trim().slice(0, 160);
+  const title = `${property.title} en ${property.location}`;
+  const cover = getCoverImage(property);
+  const image = cover.startsWith("http")
+    ? cover
+    : `${getSiteUrl()}${cover.startsWith("/") ? cover : `/${cover}`}`;
+
   return {
-    title: `${property.title} — ${property.location}`,
-    description: property.description.slice(0, 160),
+    title,
+    description,
+    alternates: { canonical: `/inmuebles/${property.slug}` },
+    openGraph: {
+      title,
+      description,
+      url: `/inmuebles/${property.slug}`,
+      type: "website",
+      images: cover.includes("placeholder") ? undefined : [{ url: image, alt: property.title }],
+    },
   };
 }
 

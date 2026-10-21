@@ -6,6 +6,8 @@ import { getAllProperties } from "@/lib/storage/properties";
 
 export const metadata: Metadata = {
   title: "Inmuebles",
+  description:
+    "Viviendas en venta, alquiler y para rehabilitar. Selección actual de Corral Business en Cantabria.",
 };
 
 export const revalidate = 0;

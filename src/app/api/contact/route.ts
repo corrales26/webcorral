@@ -44,6 +44,19 @@ export async function POST(request: Request) {
       );
     }
 
+    if (
+      name.length > 120 ||
+      phone.length > 40 ||
+      email.length > 200 ||
+      (source?.length ?? 0) > 200 ||
+      (propertyRef?.length ?? 0) > 80
+    ) {
+      return NextResponse.json(
+        { error: "Alguno de los campos es demasiado largo." },
+        { status: 400 },
+      );
+    }
+
     if (!isEmail(email)) {
       return NextResponse.json(
         { error: "Introduce un email válido." },

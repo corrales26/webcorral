@@ -3,6 +3,8 @@ import { Playfair_Display, Montserrat } from "next/font/google";
 import { CookieConsentProvider } from "@/context/CookieConsentProvider";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import { SiteShell } from "@/components/SiteShell";
+import { siteConfig } from "@/lib/data";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -17,13 +19,29 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+const siteUrl = getSiteUrl();
+const siteDescription =
+  "Especialistas en compraventa, alquiler, rehabilitación e inversión inmobiliaria en Cantabria. Tu vivienda en buenas manos.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Corral Business | Inmobiliaria en Cantabria",
     template: "%s | Corral Business",
   },
-  description:
-    "Especialistas en compraventa, alquiler, rehabilitación e inversión inmobiliaria en Cantabria. Tu vivienda en buenas manos.",
+  description: siteDescription,
+  openGraph: {
+    type: "website",
+    locale: "es_ES",
+    url: siteUrl,
+    siteName: siteConfig.name,
+    title: "Corral Business | Inmobiliaria en Cantabria",
+    description: siteDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -35,6 +53,24 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    name: siteConfig.name,
+    url: siteUrl,
+    email: siteConfig.email,
+    telephone: `+${siteConfig.whatsapp}`,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "C/ Carnerizas S/N",
+      postalCode: "39790",
+      addressLocality: "Cicero",
+      addressRegion: "Cantabria",
+      addressCountry: "ES",
+    },
+    areaServed: "Cantabria",
+  };
+
   return (
     <html
       lang="es"
@@ -42,6 +78,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <CookieConsentProvider>
           <ThemeProvider>
             <SiteShell>{children}</SiteShell>

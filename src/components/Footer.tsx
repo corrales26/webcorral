@@ -34,12 +34,14 @@ export function Footer() {
               <h3 className="mb-1 text-sm font-semibold uppercase tracking-wider text-[var(--color-accent)]">
                 WhatsApp
               </h3>
-              <Link
-                href="/contacto"
+              <a
+                href={`https://wa.me/${siteConfig.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block text-lg font-medium transition-colors hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]"
               >
-                Escríbenos
-              </Link>
+                {siteConfig.phone}
+              </a>
               <p className="mt-1 text-sm text-[var(--color-muted)]">Respuesta rápida</p>
             </div>
 
@@ -81,39 +83,17 @@ export function Footer() {
             </div>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 items-center gap-6 border-t border-[var(--color-navy-light)] pt-8 sm:grid-cols-3">
-          <Link href="/" className="flex items-center justify-center gap-2 sm:justify-self-start">
+        <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-[var(--color-navy-light)] pt-8 sm:flex-row">
+          <Link href="/" className="flex items-center justify-center gap-2">
             <LogoMark className="h-10" />
             <span className="font-[family-name:var(--font-display)] text-sm font-bold uppercase tracking-widest text-[var(--color-accent)]">
               Corral Business
             </span>
           </Link>
 
-          <p className="text-center font-[family-name:var(--font-display)] text-lg italic text-[var(--color-accent)] sm:justify-self-center">
+          <p className="text-center font-[family-name:var(--font-display)] text-lg italic text-[var(--color-accent)]">
             Tu vivienda en buenas manos
           </p>
-
-          <div className="flex items-center justify-center gap-4 sm:justify-self-end">
-            <a href="#" aria-label="Instagram" className="text-[var(--color-on-navy)] transition-colors hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-              </svg>
-            </a>
-            <a href="#" aria-label="Facebook" className="text-[var(--color-on-navy)] transition-colors hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-              </svg>
-            </a>
-            <a href="#" aria-label="LinkedIn" className="text-[var(--color-on-navy)] transition-colors hover:text-[var(--color-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus)]">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                <rect width="4" height="12" x="2" y="9" />
-                <circle cx="4" cy="4" r="2" />
-              </svg>
-            </a>
-          </div>
         </div>
 
         <nav
@@ -131,9 +111,26 @@ export function Footer() {
           ))}
         </nav>
 
-        <p className="mt-4 text-center text-xs text-[var(--color-muted)]">
-          © {new Date().getFullYear()} Corral Business. Todos los derechos reservados.
-        </p>
+        <div className="mt-4 flex flex-col items-center gap-3">
+          <p className="text-center text-xs text-[var(--color-muted)]">
+            © {new Date().getFullYear()} Corral Business. Todos los derechos reservados.
+          </p>
+          <a
+            href="https://avgg.es"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.28em] text-[var(--color-on-navy)]/55 transition-colors hover:text-[var(--color-on-navy)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-focus)]"
+          >
+            <span className="h-px w-6 bg-[var(--color-accent)]/80 transition-all group-hover:w-8" aria-hidden="true" />
+            <span>
+              Diseño web por{" "}
+              <span className="font-[family-name:var(--font-display)] text-[11px] font-semibold tracking-[0.34em] text-[var(--color-accent)]">
+                AVGG
+              </span>
+            </span>
+            <span className="h-px w-6 bg-[var(--color-accent)]/80 transition-all group-hover:w-8" aria-hidden="true" />
+          </a>
+        </div>
       </div>
     </footer>
   );

@@ -40,9 +40,11 @@ export async function sendContactEmail(payload: ContactEmailPayload): Promise<vo
   }
 
   const resend = new Resend(apiKey);
-  const subject = payload.propertyRef
-    ? `Consulta inmueble ${payload.propertyRef} — ${payload.name}`
-    : `Nueva consulta web — ${payload.name}`;
+  const safeName = payload.name.replace(/[\r\n]+/g, " ").slice(0, 120);
+  const safeRef = payload.propertyRef?.replace(/[\r\n]+/g, " ").slice(0, 80);
+  const subject = safeRef
+    ? `Consulta inmueble ${safeRef} - ${safeName}`
+    : `Nueva consulta web - ${safeName}`;
 
   const textLines = [
     `Nombre: ${payload.name}`,
