@@ -39,6 +39,14 @@ const nextConfig: NextConfig = {
     "/*": ["./data/**/*"],
     "/api/**/*": ["./data/**/*"],
   },
+  async rewrites() {
+    return [
+      { source: "/llm.txt", destination: "/llms.txt" },
+      { source: "/index.md", destination: "/api/llm-page/index" },
+      { source: "/:path*/index.md", destination: "/api/llm-page/:path*" },
+      { source: "/:path*.md", destination: "/api/llm-page/:path*" },
+    ];
+  },
 };
 
 export default nextConfig;

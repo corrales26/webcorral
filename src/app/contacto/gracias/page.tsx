@@ -4,6 +4,7 @@ import { PageHero, PageContent } from "@/components/PageLayout";
 
 export const metadata: Metadata = {
   title: "Mensaje enviado",
+  robots: { index: false, follow: false },
 };
 
 export default function ContactoGraciasPage() {

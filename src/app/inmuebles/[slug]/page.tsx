@@ -15,7 +15,6 @@ import {
 import {
   closedStampTitle,
   formatPrice,
-  getCoverImage,
   statusColor,
   statusLabel,
   typeLabel,
@@ -23,7 +22,7 @@ import {
   formatDate,
   featuredBadgePropertyIds,
 } from "@/lib/property-utils";
-import { getSiteUrl } from "@/lib/site-url";
+import { jsonLdScript, metaDescription, propertyJsonLd, propertyShareImage } from "@/lib/seo";
 
 export const revalidate = 0;
 export const dynamicParams = true;
@@ -42,14 +41,16 @@ export async function generateMetadata({
 }: PropertyPageProps): Promise<Metadata> {
   const { slug } = await params;
   const property = await getPropertyById(slug);
-  if (!property) return { title: "Inmueble no encontrado" };
+  if (!property || !property.published) {
+    return { title: "Inmueble no encontrado", robots: { index: false, follow: false } };
+  }
 
-  const description = property.description.replace(/\s+/g, " ").trim().slice(0, 160);
   const title = `${property.title} en ${property.location}`;
-  const cover = getCoverImage(property);
-  const image = cover.startsWith("http")
-    ? cover
-    : `${getSiteUrl()}${cover.startsWith("/") ? cover : `/${cover}`}`;
+  const description = metaDescription(
+    property.description,
+    `${title}. ${statusLabel(property.status)}.`,
+  );
+  const image = propertyShareImage(property);
 
   return {
     title,
@@ -60,8 +61,9 @@ export async function generateMetadata({
       description,
       url: `/inmuebles/${property.slug}`,
       type: "website",
-      images: cover.includes("placeholder") ? undefined : [{ url: image, alt: property.title }],
+      ...(image ? { images: [{ url: image, alt: property.title }] } : {}),
     },
+    ...(image ? { twitter: { card: "summary_large_image" as const, images: [image] } } : {}),
   };
 }
 
@@ -84,6 +86,10 @@ export default async function PropertyDetailPage({ params }: PropertyPageProps) 
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(propertyJsonLd(property)) }}
+      />
       <PageHero
         title={property.title}
         subtitle={property.location}

@@ -4,6 +4,8 @@ import { ContactForm } from "@/components/ContactForm";
 
 export const metadata: Metadata = {
   title: "Valoración gratuita",
+  description:
+    "Conoce el valor real de tu inmueble sin compromiso. Te asesoramos con transparencia y un análisis del mercado.",
 };
 
 export default function ValoracionPage() {

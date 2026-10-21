@@ -4,6 +4,7 @@ import { ContactForm } from "@/components/ContactForm";
 
 export const metadata: Metadata = {
   title: "Alquilar",
+  description: "Encontramos el alquiler que necesitas. Nos ocupamos de todo el proceso.",
 };
 
 export default function AlquilarPage() {

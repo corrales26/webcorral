@@ -16,7 +16,6 @@ const staticPaths = [
   "/quiero-comprar",
   "/alquilar",
   "/valoracion",
-  "/colaborar",
   "/aviso-legal",
   "/politica-privacidad",
   "/politica-cookies",
@@ -35,6 +34,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   return [
+    {
+      url: `${siteUrl}/llms.txt`,
+      lastModified: now,
+      changeFrequency: "daily" as const,
+      priority: 0.3,
+    },
     ...staticPaths.map((path) => ({
       url: `${siteUrl}${path || "/"}`,
       lastModified: now,

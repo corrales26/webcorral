@@ -3,6 +3,8 @@ import { PageHero, PageContent } from "@/components/PageLayout";
 
 export const metadata: Metadata = {
   title: "Quiénes somos",
+  description:
+    "SOMOS Corral Business, una forma diferente de entender el sector inmobiliario. Buscamos oportunidades y soluciones adaptadas a cada situación.",
 };
 
 export default function QuienesSomosPage() {

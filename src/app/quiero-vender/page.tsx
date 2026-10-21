@@ -4,6 +4,8 @@ import { ContactForm } from "@/components/ContactForm";
 
 export const metadata: Metadata = {
   title: "Quiero vender",
+  description:
+    "Convertimos tu vivienda en una oportunidad. Te acompañamos en la venta, con una estrategia adaptada a tu inmueble, sin complicaciones ni ataduras.",
 };
 
 export default function QuieroVenderPage() {

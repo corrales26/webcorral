@@ -5,6 +5,8 @@ import { services } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Servicios",
+  description:
+    "Alquiler, compraventa, locales, rehabilitación, inversión y valoración. Oficina en Cicero y actividad en toda España.",
 };
 
 export default function ServiciosPage() {
@@ -12,7 +14,7 @@ export default function ServiciosPage() {
     <>
       <PageHero
         title="Servicios"
-        subtitle="Soluciones integrales para todas tus necesidades inmobiliarias en Cantabria."
+        subtitle="Soluciones integrales para todas tus necesidades inmobiliarias en toda España."
       />
       <PageContent>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -6,6 +6,7 @@ import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Política de cookies",
+  description: "Política de cookies de Corral Business. Información sobre las cookies que usa este sitio.",
 };
 
 export default function PoliticaCookiesPage() {

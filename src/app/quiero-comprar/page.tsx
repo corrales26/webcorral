@@ -4,6 +4,8 @@ import { ContactForm } from "@/components/ContactForm";
 
 export const metadata: Metadata = {
   title: "Quiero comprar",
+  description:
+    "Buscamos, negociamos. Tú decides. Localizamos oportunidades inmobiliarias y defendemos tus intereses para que compres con confianza.",
 };
 
 export default function QuieroComprarPage() {

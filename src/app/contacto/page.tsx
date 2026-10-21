@@ -6,6 +6,8 @@ import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Contacto",
+  description:
+    "Háblanos. Tu proyecto inmobiliario empieza con una buena conversación. Teléfono 645 136 291. Oficina en Cicero, Cantabria.",
 };
 
 export default function ContactoPage() {

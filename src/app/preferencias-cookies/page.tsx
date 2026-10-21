@@ -5,6 +5,7 @@ import { CookiePreferencesForm } from "@/components/CookiePreferencesForm";
 
 export const metadata: Metadata = {
   title: "Preferencias de cookies",
+  robots: { index: false, follow: false },
 };
 
 export default function PreferenciasCookiesPage() {

@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageHero, PageContent } from "@/components/PageLayout";
 import { PropertyListing } from "@/components/property/PropertyListing";
+import { catalogJsonLd, jsonLdScript } from "@/lib/seo";
 import { getAllProperties } from "@/lib/storage/properties";
 
 export const metadata: Metadata = {
   title: "Inmuebles",
   description:
-    "Viviendas en venta, alquiler y para rehabilitar. Selección actual de Corral Business en Cantabria.",
+    "Viviendas en venta, alquiler y para rehabilitar en toda España. Catálogo publicado de Corral Business.",
 };
 
 export const revalidate = 0;
@@ -17,6 +18,10 @@ export default async function InmueblesPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(catalogJsonLd(properties)) }}
+      />
       <PageHero
         title="Inmuebles"
         subtitle="Descubre nuestra selección de propiedades en venta, alquiler y oportunidades de rehabilitación."

@@ -5,6 +5,8 @@ import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Política de privacidad",
+  description:
+    "Política de privacidad de Corral Business. Responsable: Jaime Corral Roseñada. Contacto: gestion.inmuebles@corralbusiness.es.",
 };
 
 export default function PoliticaPrivacidadPage() {

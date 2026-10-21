@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { PageHero, PageContent } from "@/components/PageLayout";
 import { ContactForm } from "@/components/ContactForm";
 import { services } from "@/lib/data";
+import { metaDescription } from "@/lib/seo";
 
 interface ServicePageProps {
   params: Promise<{ slug: string }>;
@@ -17,8 +18,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
   const { slug } = await params;
   const service = services.find((s) => s.href === `/servicios/${slug}`);
-  if (!service) return { title: "Servicio no encontrado" };
-  return { title: service.title };
+  if (!service) return { title: "Servicio no encontrado", robots: { index: false, follow: false } };
+  const description =
+    slug === "rehabilitacion"
+      ? "Estudiamos el potencial del inmueble y te ofrecemos soluciones para sacarle el mayor partido, proyecto adaptado a las posibilidades."
+      : service.description;
+  return { title: service.title, description: metaDescription(description) };
 }
 
 export default async function ServiceDetailPage({ params }: ServicePageProps) {

@@ -5,6 +5,8 @@ import { investorFeatures } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Inversores",
+  description:
+    "Encontramos oportunidades y creamos valor. Selección, rehabilitación y comercialización para invertir en toda España.",
 };
 
 function FeatureIcon({ icon }: { icon: string }) {

@@ -4,6 +4,8 @@ import { siteConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Aviso legal",
+  description:
+    "Aviso legal de Corral Business. Titular: Jaime Corral Roseñada. Oficina en C/ Carnerizas S/N, Cicero, Cantabria.",
 };
 
 export default function AvisoLegalPage() {
