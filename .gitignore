@@ -36,7 +36,10 @@ yarn-error.log*
 
 # agent tooling (local only)
 .agents/
+.hallmark/
 skills-lock.json
+AGENTS.md
+CLAUDE.md
 
 # vercel
 .vercel
