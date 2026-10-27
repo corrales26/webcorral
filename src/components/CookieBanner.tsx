@@ -28,7 +28,8 @@ export function CookieBanner() {
             className="mt-2 text-sm leading-relaxed text-[var(--color-ink-2)]"
           >
             Utilizamos cookies propias para el funcionamiento del sitio y, con su consentimiento,
-            para recordar preferencias. Puede aceptar todas, rechazar las opcionales o configurarlas
+            para recordar preferencias y medir el uso del sitio. Puede aceptar todas, rechazar las
+            opcionales o configurarlas
             en detalle. Consulte nuestra{" "}
             <Link href="/politica-cookies" className="text-[var(--color-accent)] hover:underline">
               política de cookies

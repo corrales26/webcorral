@@ -76,8 +76,7 @@ export function CookiePreferencesForm() {
               Cookies analíticas
             </span>
             <span className="mt-2 block text-sm leading-relaxed text-[var(--color-ink-2)]">
-              Nos ayudan a entender el uso del sitio de forma agregada. Actualmente no están
-              activas en la web.
+              Miden el uso del sitio con Google Analytics. Solo se activan si las acepta.
             </span>
           </span>
           <input

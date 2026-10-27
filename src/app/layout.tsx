@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import { CookieConsentProvider } from "@/context/CookieConsentProvider";
 import { ThemeProvider } from "@/context/ThemeProvider";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { SiteShell } from "@/components/SiteShell";
 import { siteConfig } from "@/lib/data";
 import { businessJsonLd, jsonLdScript } from "@/lib/seo";
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: jsonLdScript(businessJsonLd()) }}
         />
         <CookieConsentProvider>
+          <GoogleAnalytics />
           <ThemeProvider>
             <SiteShell>{children}</SiteShell>
           </ThemeProvider>

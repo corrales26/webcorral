@@ -74,8 +74,8 @@ export default function PoliticaCookiesPage() {
             <li className="flex items-start gap-3">
               <span className="mt-1 text-[var(--color-accent)]">●</span>
               <span>
-                <strong className="text-[var(--color-ink)]">Cookies analíticas:</strong> permiten
-                medir el uso del sitio de forma agregada. Actualmente no están implementadas.
+                <strong className="text-[var(--color-ink)]">Cookies analíticas:</strong> miden el
+                uso del sitio con Google Analytics. Solo se activan con su consentimiento.
               </span>
             </li>
           </ul>
@@ -112,11 +112,23 @@ export default function PoliticaCookiesPage() {
                   <td className="py-3 pr-4">Sesión de colaboradores</td>
                   <td className="py-3">Sesión</td>
                 </tr>
-                <tr>
+                <tr className="border-b border-[var(--color-rule)]">
                   <td className="py-3 pr-4">theme (localStorage)</td>
                   <td className="py-3 pr-4">Preferencias</td>
                   <td className="py-3 pr-4">Recordar tema claro u oscuro</td>
                   <td className="py-3">Persistente</td>
+                </tr>
+                <tr className="border-b border-[var(--color-rule)]">
+                  <td className="py-3 pr-4">_ga</td>
+                  <td className="py-3 pr-4">Analítica</td>
+                  <td className="py-3 pr-4">Distinguir visitas en Google Analytics</td>
+                  <td className="py-3">2 años</td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-4">_ga_W44YC6K1Z5</td>
+                  <td className="py-3 pr-4">Analítica</td>
+                  <td className="py-3 pr-4">Medir el uso del sitio con Google Analytics</td>
+                  <td className="py-3">2 años</td>
                 </tr>
               </tbody>
             </table>
