@@ -83,8 +83,8 @@ export function Footer() {
             </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-[var(--color-navy-light)] pt-8 sm:flex-row">
-          <Link href="/" className="flex items-center justify-center gap-2">
+        <div className="mt-12 grid grid-cols-1 items-center gap-6 border-t border-[var(--color-navy-light)] pt-8 sm:grid-cols-3">
+          <Link href="/" className="flex items-center justify-center gap-2 sm:justify-self-start">
             <LogoMark className="h-10" />
             <span className="font-[family-name:var(--font-display)] text-sm font-bold uppercase tracking-widest text-[var(--color-accent)]">
               Corral Business
