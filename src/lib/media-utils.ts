@@ -2,6 +2,8 @@ export const IMAGE_MIME_TYPES = [
   "image/jpeg",
   "image/png",
   "image/webp",
+  "image/heic",
+  "image/heif",
 ] as const;
 
 export const VIDEO_MIME_TYPES = [
@@ -38,19 +40,48 @@ export function getMaxUploadBytes(type: string): number {
   return isVideoMimeType(type) ? MAX_VIDEO_UPLOAD_BYTES : MAX_IMAGE_UPLOAD_BYTES;
 }
 
+const MIME_BY_EXTENSION: Record<string, string> = {
+  jpg: "image/jpeg",
+  jpeg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp",
+  heic: "image/heic",
+  heif: "image/heif",
+  mp4: "video/mp4",
+  webm: "video/webm",
+  mov: "video/quicktime",
+};
+
+export function resolveUploadMimeType(file: { type: string; name: string }): string {
+  if (file.type) return file.type;
+  const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
+  return MIME_BY_EXTENSION[extension] ?? "";
+}
+
+export function fileExceedsUploadLimit(file: {
+  type: string;
+  name: string;
+  size: number;
+}): string | null {
+  const type = resolveUploadMimeType(file);
+  if (file.size <= getMaxUploadBytes(type)) return null;
+  return isVideoMimeType(type)
+    ? `«${file.name}» supera el límite de 50 MB.`
+    : `«${file.name}» supera el límite de 5 MB.`;
+}
+
 export function validateUploadMediaFile(file: {
   type: string;
   size: number;
 }): string | null {
   if (!(UPLOAD_MEDIA_MIME_TYPES as readonly string[]).includes(file.type)) {
-    return "Formato no permitido. Usa JPG, PNG, WebP, MP4, WebM o MOV.";
+    return "Formato no permitido. Usa JPG, PNG, WebP, HEIC, MP4, WebM o MOV.";
   }
 
-  const maxBytes = getMaxUploadBytes(file.type);
-  if (file.size > maxBytes) {
+  if (file.size > getMaxUploadBytes(file.type)) {
     return isVideoMimeType(file.type)
-      ? "El vídeo supera el límite de 50 MB"
-      : "La imagen supera el límite de 5 MB";
+      ? "El vídeo supera el límite de 50 MB."
+      : "La imagen supera el límite de 5 MB.";
   }
 
   return null;

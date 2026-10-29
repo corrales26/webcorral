@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
   images: {
     localPatterns: [
       { pathname: "/api/colaboraciones/imagen/**" },
+      { pathname: "/uploads/**" },
       { pathname: "/logocorral.svg" },
     ],
     remotePatterns: [

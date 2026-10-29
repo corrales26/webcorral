@@ -1,9 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PropertyMedia } from "@/components/media/PropertyMedia";
-import { UPLOAD_MEDIA_ACCEPT } from "@/lib/media-utils";
+import { compressImageFile } from "@/lib/compress-image-file";
+import {
+  fileExceedsUploadLimit,
+  isVideoMimeType,
+  resolveUploadMimeType,
+  UPLOAD_MEDIA_ACCEPT,
+} from "@/lib/media-utils";
 import type { Property } from "@/lib/types/property";
 import {
   AMENITY_OPTIONS,
@@ -108,8 +114,16 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
   const [featureInput, setFeatureInput] = useState("");
   const [imageUrlInput, setImageUrlInput] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [uploadLabel, setUploadLabel] = useState("");
+  const [uploadError, setUploadError] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const errorRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (!error) return;
+    errorRef.current?.scrollIntoView({ block: "center" });
+  }, [error]);
 
   function updateField<K extends keyof PropertyInput>(
     key: K,
@@ -119,23 +133,82 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
   }
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = [...(e.target.files ?? [])];
+    e.target.value = "";
+    if (files.length === 0) return;
 
     setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
+    setError("");
+    setUploadError("");
+    const failures: string[] = [];
 
-    const res = await fetch("/api/upload", { method: "POST", body: formData });
-    if (res.ok) {
-      const { url } = await res.json();
-      updateField("images", [...form.images, url]);
-    } else {
-      const data = await res.json();
-      setError(data.error || "Error al subir el archivo");
+    try {
+      for (let index = 0; index < files.length; index += 1) {
+        const original = files[index];
+        setUploadLabel(
+          files.length > 1
+            ? `Subiendo ${index + 1} de ${files.length}...`
+            : "Subiendo..."
+        );
+
+        const video = isVideoMimeType(resolveUploadMimeType(original));
+        let file = original;
+        if (!video) {
+          try {
+            file = await compressImageFile(original);
+          } catch {
+            file = original;
+          }
+        }
+
+        const tooLarge = fileExceedsUploadLimit({
+          type: file.type || original.type,
+          name: original.name,
+          size: file.size,
+        });
+        if (tooLarge) {
+          failures.push(tooLarge);
+          continue;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        let response: Response;
+        try {
+          response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+            signal: AbortSignal.timeout(120000),
+          });
+        } catch {
+          failures.push(`${original.name}: no se ha podido subir`);
+          continue;
+        }
+
+        const data = (await response.json().catch(() => null)) as {
+          url?: string;
+          error?: string;
+        } | null;
+
+        if (!response.ok || !data?.url) {
+          failures.push(data?.error || `${original.name}: no se ha podido subir`);
+          continue;
+        }
+
+        const url = data.url;
+        setForm((prev) => ({ ...prev, images: [...prev.images, url] }));
+      }
+    } finally {
+      setUploading(false);
+      setUploadLabel("");
     }
-    setUploading(false);
-    e.target.value = "";
+
+    if (failures.length > 0) {
+      const message = failures.join(" ");
+      setUploadError(message);
+      setError(message);
+    }
   }
 
   function addImageUrl() {
@@ -168,6 +241,25 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (uploading) {
+      setError("Espera a que terminen de subirse las fotos.");
+      return;
+    }
+
+    const missing = !form.title.trim()
+      ? "Escribe el título."
+      : !form.location.trim()
+        ? "Escribe la localidad."
+        : !form.province.trim()
+          ? "Escribe la provincia."
+          : !form.description.trim()
+            ? "Escribe la descripción."
+            : null;
+    if (missing) {
+      setError(missing);
+      return;
+    }
+
     setSaving(true);
     setError("");
 
@@ -177,18 +269,24 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         : `/api/properties/${initialData!.id}`;
     const method = mode === "create" ? "POST" : "PUT";
 
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    if (res.ok) {
-      router.push("/admin/inmuebles");
-      router.refresh();
-    } else {
-      const data = await res.json();
-      setError(data.error || "Error al guardar");
+      if (res.ok) {
+        router.push("/admin/inmuebles");
+        router.refresh();
+        return;
+      }
+
+      const data = (await res.json().catch(() => null)) as { error?: string } | null;
+      setError(data?.error || "Error al guardar");
+      setSaving(false);
+    } catch {
+      setError("No se ha podido guardar el inmueble.");
       setSaving(false);
     }
   }
@@ -213,9 +311,9 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
     "mb-1 block text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)]";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} noValidate className="space-y-8">
       {error && (
-        <p className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-300">
+        <p ref={errorRef} className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-300">
           {error}
         </p>
       )}
@@ -380,10 +478,11 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         </div>
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <label className="cursor-pointer rounded-sm border border-[var(--color-accent)] px-4 py-2 text-center text-sm font-semibold text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-on-accent)]">
-            {uploading ? "Subiendo..." : "Subir foto o vídeo"}
+            {uploading ? uploadLabel || "Subiendo..." : "Subir fotos o vídeos"}
             <input
               type="file"
               accept={UPLOAD_MEDIA_ACCEPT}
+              multiple
               onChange={handleImageUpload}
               className="hidden"
               disabled={uploading}
@@ -399,6 +498,11 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
           <button type="button" onClick={addImageUrl} className="rounded-sm bg-[var(--color-navy)] px-4 py-2 text-sm text-[var(--color-on-navy)]">
             Añadir URL
           </button>
+          {uploadError && (
+            <p className="w-full rounded-md bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-300">
+              {uploadError}
+            </p>
+          )}
         </div>
       </section>
 

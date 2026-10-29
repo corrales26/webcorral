@@ -55,8 +55,20 @@ interface PropertyRow {
 
 function optionalText(value: string | null | undefined): string | undefined {
   if (!value) return undefined;
-  const plain = isEncrypted(value) ? decryptString(value) : value;
-  return plain || undefined;
+  try {
+    const plain = isEncrypted(value) ? decryptString(value) : value;
+    return plain || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function readJson<T>(payload: string, fallback: T): T {
+  try {
+    return decryptJson(payload, fallback);
+  } catch {
+    return fallback;
+  }
 }
 
 function rowToProperty(row: PropertyRow): Property {
@@ -88,13 +100,13 @@ function rowToProperty(row: PropertyRow): Property {
     pool: row.pool,
     storage: row.storage,
     furnished: row.furnished,
-    images: decryptJson<string[]>(row.images, []),
+    images: readJson<string[]>(row.images, []),
     description: row.description
       ? isEncrypted(row.description)
-        ? decryptString(row.description)
+        ? optionalText(row.description) ?? ""
         : row.description
       : "",
-    features: decryptJson<string[]>(row.features, []),
+    features: readJson<string[]>(row.features, []),
     reference: row.reference,
     featured: row.featured,
     published: row.published,
@@ -250,7 +262,7 @@ export async function createProperty(input: PropertyInput): Promise<Property> {
     ...input,
     id: randomUUID(),
     slug: finalSlug,
-    reference: input.reference.trim(),
+    reference: input.reference?.trim() || (await getNextReference()),
     createdAt: now,
     updatedAt: now,
   };
@@ -279,6 +291,8 @@ export async function updateProperty(
     ...current,
     ...input,
     id: current.id,
+    slug: input.slug?.trim() || current.slug,
+    reference: input.reference?.trim() || current.reference,
     createdAt: current.createdAt,
     updatedAt: new Date().toISOString(),
   };

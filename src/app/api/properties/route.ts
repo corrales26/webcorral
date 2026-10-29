@@ -45,9 +45,10 @@ export async function POST(request: Request) {
     const property = await createProperty(body);
     revalidatePublicProperties();
     return NextResponse.json(property, { status: 201 });
-  } catch {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
     return NextResponse.json(
-      { error: "Error al crear el inmueble" },
+      { error: message || "Error al crear el inmueble" },
       { status: 500 }
     );
   }

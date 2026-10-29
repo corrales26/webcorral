@@ -5,8 +5,10 @@ import { randomUUID } from "crypto";
 import { isAuthenticated } from "@/lib/auth";
 import {
   isVideoMimeType,
+  resolveUploadMimeType,
   validateUploadMediaFile,
 } from "@/lib/media-utils";
+import { optimizePropertyImage } from "@/lib/optimize-property-image";
 import {
   getSupabaseAdmin,
   isSupabaseConfigured,
@@ -38,17 +40,38 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No se recibió ningún archivo" }, { status: 400 });
     }
 
-    const validationError = validateUploadMediaFile(file);
+    const mimeType = resolveUploadMimeType(file);
+    const validationError = validateUploadMediaFile({
+      type: mimeType,
+      size: file.size,
+    });
     if (validationError) {
       return NextResponse.json({ error: validationError }, { status: 400 });
     }
 
-    const ext =
+    const source = Buffer.from(await file.arrayBuffer());
+    const video = isVideoMimeType(mimeType);
+    let buffer = source;
+    let contentType = mimeType;
+    let ext =
       file.name.split(".").pop()?.toLowerCase() ||
-      EXT_BY_MIME[file.type] ||
-      (isVideoMimeType(file.type) ? "mp4" : "jpg");
+      EXT_BY_MIME[mimeType] ||
+      (video ? "mp4" : "jpg");
+
+    if (!video) {
+      try {
+        buffer = Buffer.from(await optimizePropertyImage(source));
+        contentType = "image/webp";
+        ext = "webp";
+      } catch {
+        return NextResponse.json(
+          { error: "No se ha podido procesar la imagen. Prueba con JPG o PNG." },
+          { status: 400 }
+        );
+      }
+    }
+
     const filename = `${randomUUID()}.${ext}`;
-    const buffer = Buffer.from(await file.arrayBuffer());
 
     if (isSupabaseConfigured()) {
       const supabase = getSupabaseAdmin();
@@ -56,7 +79,7 @@ export async function POST(request: Request) {
       const { error } = await supabase.storage
         .from(PROPERTY_IMAGES_BUCKET)
         .upload(objectPath, buffer, {
-          contentType: file.type,
+          contentType,
           upsert: false,
         });
 

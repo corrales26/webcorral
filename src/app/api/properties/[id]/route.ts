@@ -48,9 +48,10 @@ export async function PUT(request: Request, { params }: RouteParams) {
 
     revalidatePublicProperties();
     return NextResponse.json(property);
-  } catch {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
     return NextResponse.json(
-      { error: "Error al actualizar el inmueble" },
+      { error: message || "Error al actualizar el inmueble" },
       { status: 500 }
     );
   }

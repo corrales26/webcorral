@@ -13,8 +13,14 @@ interface PropertyGalleryProps {
 
 export function PropertyGallery({ images, title, stampTitle }: PropertyGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const gallery = images.length > 0 ? images : ["/uploads/placeholder.jpg"];
+  const gallery = images.filter(Boolean);
   const activeSrc = gallery[activeIndex];
+
+  if (gallery.length === 0) {
+    return (
+      <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-[var(--color-paper-3)]" />
+    );
+  }
 
   return (
     <div className="min-w-0 space-y-3">
