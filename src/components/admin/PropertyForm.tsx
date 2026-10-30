@@ -52,6 +52,68 @@ const defaultValues: PropertyInput = {
   published: false,
 };
 
+const VIDEO_UPLOAD_TIMEOUT_MS = 15 * 60 * 1000;
+
+async function uploadPropertyVideo(
+  file: File
+): Promise<{ url?: string; error?: string }> {
+  const type = resolveUploadMimeType(file);
+  let prepare: Response;
+  try {
+    prepare = await fetch("/api/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: file.name, type, size: file.size }),
+      signal: AbortSignal.timeout(30000),
+    });
+  } catch {
+    return { error: `${file.name}: no se ha podido subir` };
+  }
+
+  const prepared = (await prepare.json().catch(() => null)) as {
+    url?: string;
+    signedUrl?: string;
+    contentType?: string;
+    error?: string;
+    fallback?: boolean;
+  } | null;
+
+  if (prepared?.fallback) return {};
+
+  if (!prepare.ok || !prepared?.signedUrl || !prepared.url) {
+    return { error: prepared?.error || `${file.name}: no se ha podido subir` };
+  }
+
+  let uploaded: Response;
+  try {
+    uploaded = await fetch(prepared.signedUrl, {
+      method: "PUT",
+      body: file,
+      headers: {
+        "Content-Type": prepared.contentType || type,
+        "cache-control": "max-age=3600",
+      },
+      signal: AbortSignal.timeout(VIDEO_UPLOAD_TIMEOUT_MS),
+    });
+  } catch {
+    return { error: `${file.name}: no se ha podido subir` };
+  }
+
+  if (!uploaded.ok) {
+    const payload = (await uploaded.json().catch(() => null)) as {
+      message?: string;
+      error?: string;
+    } | null;
+    const message = payload?.message || payload?.error || "";
+    if (/maximum allowed size|exceeded/i.test(message)) {
+      return { error: "El vídeo supera el límite de 50 MB." };
+    }
+    return { error: message || `${file.name}: no se ha podido subir` };
+  }
+
+  return { url: prepared.url };
+}
+
 export function PropertyForm({ initialData, mode }: PropertyFormProps) {
   const router = useRouter();
   const [form, setForm] = useState<PropertyInput>(
@@ -178,7 +240,18 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
 
         const video = isVideoMimeType(resolveUploadMimeType(original));
         let file = original;
-        if (!video) {
+        if (video) {
+          const uploaded = await uploadPropertyVideo(original);
+          if (uploaded.error) {
+            failures.push(uploaded.error);
+            continue;
+          }
+          if (uploaded.url) {
+            const url = uploaded.url;
+            setForm((prev) => ({ ...prev, images: [...prev.images, url] }));
+            continue;
+          }
+        } else {
           try {
             file = await compressImageFile(original);
           } catch {
@@ -328,7 +401,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-8">
       {error && (
-        <p ref={errorRef} className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-300">
+        <p ref={errorRef} className="rounded-md bg-red-50 px-4 py-3 text-sm text-black dark:bg-red-900/20 dark:text-white">
           {error}
         </p>
       )}
@@ -514,7 +587,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
             Añadir URL
           </button>
           {uploadError && (
-            <p className="w-full rounded-md bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-300">
+            <p className="w-full rounded-md bg-red-50 px-4 py-3 text-sm text-black dark:bg-red-900/20 dark:text-white">
               {uploadError}
             </p>
           )}

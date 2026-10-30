@@ -32,6 +32,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 
+  const requestType = request.headers.get("content-type") ?? "";
+  if (requestType.includes("application/json")) {
+    return createDirectVideoUpload(request);
+  }
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
@@ -104,4 +109,68 @@ export async function POST(request: Request) {
       { status: 500 },
     );
   }
+}
+
+async function createDirectVideoUpload(request: Request) {
+  let body: { name?: unknown; type?: unknown; size?: unknown };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "No se ha podido preparar la subida" }, { status: 400 });
+  }
+
+  const name = typeof body.name === "string" ? body.name : "";
+  const type = resolveUploadMimeType({
+    type: typeof body.type === "string" ? body.type : "",
+    name,
+  });
+  const size = typeof body.size === "number" ? body.size : Number.NaN;
+
+  if (!isVideoMimeType(type)) {
+    return NextResponse.json(
+      { error: "Formato no permitido. Usa JPG, PNG, WebP, HEIC, MP4, WebM o MOV." },
+      { status: 400 }
+    );
+  }
+
+  const validationError = validateUploadMediaFile({ type, size });
+  if (validationError) {
+    return NextResponse.json({ error: validationError }, { status: 400 });
+  }
+
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ fallback: true });
+  }
+
+  const supabase = getSupabaseAdmin();
+  const bucket = await supabase.storage.getBucket(PROPERTY_IMAGES_BUCKET);
+  const bucketLimit = Number(bucket.data?.file_size_limit);
+  if (Number.isFinite(bucketLimit) && bucketLimit > 0 && size > bucketLimit) {
+    const megabytes = Math.floor(bucketLimit / (1024 * 1024));
+    return NextResponse.json(
+      { error: `El almacén solo acepta vídeos de hasta ${megabytes} MB.` },
+      { status: 400 }
+    );
+  }
+
+  const ext = EXT_BY_MIME[type] ?? "mp4";
+  const objectPath = `properties/${randomUUID()}.${ext}`;
+  const { data, error } = await supabase.storage
+    .from(PROPERTY_IMAGES_BUCKET)
+    .createSignedUploadUrl(objectPath);
+
+  if (error || !data?.signedUrl) {
+    return NextResponse.json(
+      { error: error?.message || "No se ha podido preparar la subida" },
+      { status: 500 }
+    );
+  }
+
+  const { data: pub } = supabase.storage.from(PROPERTY_IMAGES_BUCKET).getPublicUrl(objectPath);
+
+  return NextResponse.json({
+    signedUrl: data.signedUrl,
+    url: pub.publicUrl,
+    contentType: type,
+  });
 }
