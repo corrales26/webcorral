@@ -137,17 +137,42 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
     e.target.value = "";
     if (files.length === 0) return;
 
-    setUploading(true);
-    setError("");
-    setUploadError("");
     const failures: string[] = [];
+    const accepted: File[] = [];
 
+    for (const original of files) {
+      const tooLarge = fileExceedsUploadLimit({
+        type: original.type,
+        name: original.name,
+        size: original.size,
+      });
+      if (tooLarge) {
+        failures.push(
+          `${tooLarge} Puedes guardar el inmueble con las fotos ya añadidas o elegir un archivo más pequeño.`
+        );
+        continue;
+      }
+      accepted.push(original);
+    }
+
+    if (failures.length > 0) {
+      const message = failures.join(" ");
+      setUploadError(message);
+      setError(message);
+    } else {
+      setUploadError("");
+      setError("");
+    }
+
+    if (accepted.length === 0) return;
+
+    setUploading(true);
     try {
-      for (let index = 0; index < files.length; index += 1) {
-        const original = files[index];
+      for (let index = 0; index < accepted.length; index += 1) {
+        const original = accepted[index];
         setUploadLabel(
-          files.length > 1
-            ? `Subiendo ${index + 1} de ${files.length}...`
+          accepted.length > 1
+            ? `Subiendo ${index + 1} de ${accepted.length}...`
             : "Subiendo..."
         );
 
@@ -159,16 +184,6 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
           } catch {
             file = original;
           }
-        }
-
-        const tooLarge = fileExceedsUploadLimit({
-          type: file.type || original.type,
-          name: original.name,
-          size: file.size,
-        });
-        if (tooLarge) {
-          failures.push(tooLarge);
-          continue;
         }
 
         const formData = new FormData();
