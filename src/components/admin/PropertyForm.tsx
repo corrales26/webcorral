@@ -421,7 +421,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-8">
       {error && (
-        <p ref={errorRef} className="rounded-md bg-red-50 px-4 py-3 text-sm text-[var(--color-ink)] dark:bg-red-900/20">
+        <p ref={errorRef} className="rounded-md border border-red-600 bg-white px-4 py-3 text-sm text-black">
           {error}
         </p>
       )}
@@ -586,7 +586,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         </div>
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <label className="cursor-pointer rounded-sm border border-[var(--color-accent)] px-4 py-2 text-center text-sm font-semibold text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-on-accent)]">
-            {uploading ? uploadLabel || "Subiendo..." : "Subir fotos o vídeos"}
+            {uploadError ? "Supera el límite" : uploading ? uploadLabel || "Subiendo..." : "Subir fotos o vídeos"}
             <input
               type="file"
               accept={UPLOAD_MEDIA_ACCEPT}
@@ -607,7 +607,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
             Añadir URL
           </button>
           {uploadError && (
-            <p className="w-full rounded-md bg-red-50 px-4 py-3 text-sm text-[var(--color-ink)] dark:bg-red-900/20">
+            <p className="w-full rounded-md border border-red-600 bg-white px-4 py-3 text-sm text-black">
               {uploadError}
             </p>
           )}

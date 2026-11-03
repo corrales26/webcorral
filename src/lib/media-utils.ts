@@ -84,9 +84,10 @@ export function fileExceedsUploadLimit(file: {
 }): string | null {
   const type = resolveUploadMimeType(file);
   if (file.size <= getMaxUploadBytes(type)) return null;
+  const megabytes = (file.size / 1000000).toFixed(1).replace(".", ",");
   return isVideoMimeType(type)
-    ? `«${file.name}» supera el límite de 50 MB.`
-    : `«${file.name}» supera el límite de 5 MB.`;
+    ? `«${file.name}» pesa ${megabytes} MB y supera el límite de 50 MB.`
+    : `«${file.name}» pesa ${megabytes} MB y supera el límite de 5 MB.`;
 }
 
 export function validateUploadMediaFile(file: {
