@@ -32,7 +32,7 @@ export const UPLOAD_MEDIA_ACCEPT = [
   ".mov",
 ].join(",");
 
-export const MAX_IMAGE_UPLOAD_BYTES = 5 * 1000 * 1000;
+export const MAX_IMAGE_UPLOAD_BYTES = 4_400_000;
 export const MAX_VIDEO_UPLOAD_BYTES = 50 * 1024 * 1024;
 
 export function isVideoMimeType(type: string): boolean {
@@ -87,7 +87,7 @@ export function fileExceedsUploadLimit(file: {
   const megabytes = (file.size / 1000000).toFixed(1).replace(".", ",");
   return isVideoMimeType(type)
     ? `«${file.name}» pesa ${megabytes} MB y supera el límite de 50 MB.`
-    : `«${file.name}» pesa ${megabytes} MB y supera el límite de 5 MB.`;
+    : `«${file.name}» pesa ${megabytes} MB y supera el límite de 4,5 MB.`;
 }
 
 export function validateUploadMediaFile(file: {
@@ -101,7 +101,7 @@ export function validateUploadMediaFile(file: {
   if (file.size > getMaxUploadBytes(file.type)) {
     return isVideoMimeType(file.type)
       ? "El vídeo supera el límite de 50 MB."
-      : "La imagen supera el límite de 5 MB.";
+      : "La imagen supera el límite de 4,5 MB.";
   }
 
   return null;

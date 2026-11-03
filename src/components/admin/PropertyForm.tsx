@@ -237,7 +237,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
       setUploading(false);
       setUploadLabel("");
       const message =
-        "No se ha podido subir la foto. Si pesa más de 5 MB, elige una más pequeña. Puedes guardar el inmueble con las fotos ya añadidas.";
+        "No se ha podido subir la foto. Si pesa más de 4,5 MB, elige una más pequeña. Puedes guardar el inmueble con las fotos ya añadidas.";
       setUploadError(message);
       setError(message);
     }, 50000);
@@ -294,7 +294,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
           const oversize = !video && original.size > 4 * 1000 * 1000;
           failures.push(
             oversize
-              ? `«${original.name}» supera el límite de 5 MB. Puedes guardar el inmueble con las fotos ya añadidas o elegir un archivo más pequeño.`
+              ? `«${original.name}» supera el límite de 4,5 MB. Puedes guardar el inmueble con las fotos ya añadidas o elegir un archivo más pequeño.`
               : data?.error ||
                 (heic
                   ? "No se ha podido procesar la foto del iPhone. Prueba con JPG o PNG."
