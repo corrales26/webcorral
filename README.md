@@ -42,7 +42,7 @@ Sin variables de Supabase, el CMS sigue usando `data/properties.json` en local.
 4. En Supabase, ejecuta `supabase/schema.sql` y `supabase/access.sql` en el SQL Editor. El admin y las invitaciones se crean ahí, no desde la web.
 5. Despliega.
 
-El CMS en producción lee y escribe en Supabase. Dirección, descripción, extras e imágenes se cifran con AES-256-GCM antes de guardarse. Las fotos van al bucket privado `property-images`.
+El CMS en producción lee y escribe en Supabase. Dirección, descripción, extras e imágenes se cifran con AES-256-GCM antes de guardarse. Las  fotos van al bucket privado `property-images`.
 
 ## Estructura
 
