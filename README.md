@@ -12,7 +12,7 @@ npm run dev
 
 Abre [http://localhost:3000](http://localhost:3000).
 
-### Variables de entorno
+### Variables de  entorno
 
 | Variable | Descripción |
 |----------|-------------|
