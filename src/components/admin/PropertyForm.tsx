@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PropertyMedia } from "@/components/media/PropertyMedia";
-import { compressImageFile } from "@/lib/compress-image-file";
 import {
   fileExceedsUploadLimit,
   isHeicUpload,
@@ -227,9 +226,21 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
       setError("");
     }
 
-    if (accepted.length === 0) return;
+    if (accepted.length === 0) {
+      setUploading(false);
+      setUploadLabel("");
+      return;
+    }
 
     setUploading(true);
+    const watchdog = window.setTimeout(() => {
+      setUploading(false);
+      setUploadLabel("");
+      const message =
+        "No se ha podido subir la foto. Si pesa más de 5 MB, elige una más pequeña. Puedes guardar el inmueble con las fotos ya añadidas.";
+      setUploadError(message);
+      setError(message);
+    }, 50000);
     try {
       for (let index = 0; index < accepted.length; index += 1) {
         const original = accepted[index];
@@ -251,17 +262,6 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
           if (uploaded.url) {
             const url = uploaded.url;
             setForm((prev) => ({ ...prev, images: [...prev.images, url] }));
-            continue;
-          }
-        } else {
-          try {
-            file = await compressImageFile(original);
-          } catch (error) {
-            failures.push(
-              error instanceof Error
-                ? error.message
-                : `«${original.name}» no se ha podido preparar. Puedes guardar el inmueble con las fotos ya añadidas o elegir un archivo más pequeño.`
-            );
             continue;
           }
         }
@@ -291,11 +291,14 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         } | null;
 
         if (!response.ok || !data?.url) {
+          const oversize = !video && original.size > 4 * 1000 * 1000;
           failures.push(
-            data?.error ||
-              (heic
-                ? "No se ha podido procesar la foto del iPhone. Prueba con JPG o PNG."
-                : `${original.name}: no se ha podido subir`)
+            oversize
+              ? `«${original.name}» supera el límite de 5 MB. Puedes guardar el inmueble con las fotos ya añadidas o elegir un archivo más pequeño.`
+              : data?.error ||
+                (heic
+                  ? "No se ha podido procesar la foto del iPhone. Prueba con JPG o PNG."
+                  : `${original.name}: no se ha podido subir`)
           );
           continue;
         }
@@ -304,6 +307,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         setForm((prev) => ({ ...prev, images: [...prev.images, url] }));
       }
     } finally {
+      window.clearTimeout(watchdog);
       setUploading(false);
       setUploadLabel("");
     }
@@ -417,7 +421,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-8">
       {error && (
-        <p ref={errorRef} className="rounded-md bg-red-50 px-4 py-3 text-sm text-black dark:bg-red-900/20 dark:text-white">
+        <p ref={errorRef} className="rounded-md bg-red-50 px-4 py-3 text-sm text-[var(--color-ink)] dark:bg-red-900/20">
           {error}
         </p>
       )}
@@ -603,7 +607,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
             Añadir URL
           </button>
           {uploadError && (
-            <p className="w-full rounded-md bg-red-50 px-4 py-3 text-sm text-black dark:bg-red-900/20 dark:text-white">
+            <p className="w-full rounded-md bg-red-50 px-4 py-3 text-sm text-[var(--color-ink)] dark:bg-red-900/20">
               {uploadError}
             </p>
           )}

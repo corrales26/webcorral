@@ -32,7 +32,7 @@ export const UPLOAD_MEDIA_ACCEPT = [
   ".mov",
 ].join(",");
 
-export const MAX_IMAGE_UPLOAD_BYTES = 5 * 1024 * 1024;
+export const MAX_IMAGE_UPLOAD_BYTES = 5 * 1000 * 1000;
 export const MAX_VIDEO_UPLOAD_BYTES = 50 * 1024 * 1024;
 
 export function isVideoMimeType(type: string): boolean {
