@@ -1,6 +1,6 @@
 # Corral Business
 
-Web de inmobiliaria en Cantabria — Next.js 16, Tailwind CSS 4, CMS propio.
+Web de inmobiliaria  en Cantabria — Next.js 16, Tailwind CSS 4, CMS propio.
 
 ## Desarrollo local
 
