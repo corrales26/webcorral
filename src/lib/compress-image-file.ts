@@ -1,44 +1,50 @@
 import { isHeicUpload } from "@/lib/media-utils";
 
-const MAX_EDGE = 1920;
+const COMPRESS_TIMEOUT_MS = 12000;
+const DIRECT_UPLOAD_BYTES = 4 * 1024 * 1024;
 
 export async function compressImageFile(file: File): Promise<File> {
-  if (isHeicUpload(file)) return file;
-  if (!file.type.startsWith("image/")) return file;
+  if (isHeicUpload(file) || !file.type.startsWith("image/")) return file;
 
-  const bitmap = await createImageBitmap(file);
-  try {
-    const longest = Math.max(bitmap.width, bitmap.height);
-    const scale = longest > MAX_EDGE ? MAX_EDGE / longest : 1;
-    const width = Math.max(1, Math.round(bitmap.width * scale));
-    const height = Math.max(1, Math.round(bitmap.height * scale));
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext("2d");
-    if (!context) return file;
+  const compressed = await compressInWorker(file);
+  if (compressed) return compressed;
+  if (file.size <= DIRECT_UPLOAD_BYTES) return file;
 
-    context.drawImage(bitmap, 0, 0, width, height);
-    const blob =
-      (await canvasBlob(canvas, "image/webp", 0.82)) ??
-      (await canvasBlob(canvas, "image/jpeg", 0.82));
-    if (!blob) return file;
-
-    const base = file.name.replace(/\.[^.]+$/, "") || "foto";
-    const type = blob.type || "image/jpeg";
-    const extension = type === "image/webp" ? "webp" : "jpg";
-    return new File([blob], `${base}.${extension}`, { type });
-  } finally {
-    bitmap.close();
-  }
+  throw new Error(
+    `«${file.name}» no se ha podido preparar. Puedes guardar el inmueble con las fotos ya añadidas o elegir un archivo más pequeño.`
+  );
 }
 
-function canvasBlob(
-  canvas: HTMLCanvasElement,
-  type: string,
-  quality: number
-): Promise<Blob | null> {
+function compressInWorker(file: File): Promise<File | null> {
   return new Promise((resolve) => {
-    canvas.toBlob((blob) => resolve(blob), type, quality);
+    let worker: Worker;
+    try {
+      worker = new Worker(new URL("./compress-image.worker.ts", import.meta.url));
+    } catch {
+      resolve(null);
+      return;
+    }
+
+    let settled = false;
+    const finish = (result: File | null) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      worker.terminate();
+      resolve(result);
+    };
+
+    const timer = setTimeout(() => finish(null), COMPRESS_TIMEOUT_MS);
+
+    worker.onmessage = (event: MessageEvent<{ blob?: Blob; name?: string; type?: string }>) => {
+      const data = event.data;
+      if (!data?.blob || !data.name || !data.type) {
+        finish(null);
+        return;
+      }
+      finish(new File([data.blob], data.name, { type: data.type }));
+    };
+    worker.onerror = () => finish(null);
+    worker.postMessage({ file });
   });
 }

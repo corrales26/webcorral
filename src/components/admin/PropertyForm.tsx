@@ -256,8 +256,13 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         } else {
           try {
             file = await compressImageFile(original);
-          } catch {
-            file = original;
+          } catch (error) {
+            failures.push(
+              error instanceof Error
+                ? error.message
+                : `«${original.name}» no se ha podido preparar. Puedes guardar el inmueble con las fotos ya añadidas o elegir un archivo más pequeño.`
+            );
+            continue;
           }
         }
 
@@ -269,10 +274,14 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
           response = await fetch("/api/upload", {
             method: "POST",
             body: formData,
-            signal: AbortSignal.timeout(120000),
+            signal: AbortSignal.timeout(45000),
           });
         } catch {
-          failures.push(`${original.name}: no se ha podido subir`);
+          failures.push(
+            heic
+              ? "No se ha podido procesar la foto del iPhone. Prueba con JPG o PNG."
+              : `${original.name}: no se ha podido subir`
+          );
           continue;
         }
 
