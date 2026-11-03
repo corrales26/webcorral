@@ -6,6 +6,7 @@ import { PropertyMedia } from "@/components/media/PropertyMedia";
 import { compressImageFile } from "@/lib/compress-image-file";
 import {
   fileExceedsUploadLimit,
+  isHeicUpload,
   isVideoMimeType,
   resolveUploadMimeType,
   UPLOAD_MEDIA_ACCEPT,
@@ -239,6 +240,7 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         );
 
         const video = isVideoMimeType(resolveUploadMimeType(original));
+        const heic = isHeicUpload(original);
         let file = original;
         if (video) {
           const uploaded = await uploadPropertyVideo(original);
@@ -280,7 +282,12 @@ export function PropertyForm({ initialData, mode }: PropertyFormProps) {
         } | null;
 
         if (!response.ok || !data?.url) {
-          failures.push(data?.error || `${original.name}: no se ha podido subir`);
+          failures.push(
+            data?.error ||
+              (heic
+                ? "No se ha podido procesar la foto del iPhone. Prueba con JPG o PNG."
+                : `${original.name}: no se ha podido subir`)
+          );
           continue;
         }
 

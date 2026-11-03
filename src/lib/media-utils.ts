@@ -19,7 +19,18 @@ export const UPLOAD_MEDIA_MIME_TYPES = [
 
 export type UploadMediaMimeType = (typeof UPLOAD_MEDIA_MIME_TYPES)[number];
 
-export const UPLOAD_MEDIA_ACCEPT = UPLOAD_MEDIA_MIME_TYPES.join(",");
+export const UPLOAD_MEDIA_ACCEPT = [
+  ...UPLOAD_MEDIA_MIME_TYPES,
+  ".heic",
+  ".heif",
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".webp",
+  ".mp4",
+  ".webm",
+  ".mov",
+].join(",");
 
 export const MAX_IMAGE_UPLOAD_BYTES = 5 * 1024 * 1024;
 export const MAX_VIDEO_UPLOAD_BYTES = 50 * 1024 * 1024;
@@ -52,8 +63,16 @@ const MIME_BY_EXTENSION: Record<string, string> = {
   mov: "video/quicktime",
 };
 
+export function isHeicUpload(file: { type: string; name: string }): boolean {
+  const type = file.type.toLowerCase();
+  if (type.includes("heic") || type.includes("heif")) return true;
+  const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
+  return extension === "heic" || extension === "heif";
+}
+
 export function resolveUploadMimeType(file: { type: string; name: string }): string {
-  if (file.type) return file.type;
+  if (isHeicUpload(file)) return "image/heic";
+  if (file.type && file.type !== "application/octet-stream") return file.type;
   const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
   return MIME_BY_EXTENSION[extension] ?? "";
 }

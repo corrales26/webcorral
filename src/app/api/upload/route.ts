@@ -8,6 +8,7 @@ import {
   resolveUploadMimeType,
   validateUploadMediaFile,
 } from "@/lib/media-utils";
+import { convertHeicToJpeg, isHeicBuffer } from "@/lib/convert-heic";
 import { optimizePropertyImage } from "@/lib/optimize-property-image";
 import {
   getSupabaseAdmin,
@@ -54,8 +55,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: validationError }, { status: 400 });
     }
 
-    const source = Buffer.from(await file.arrayBuffer());
+    let source = Buffer.from(await file.arrayBuffer());
     const video = isVideoMimeType(mimeType);
+    if (!video && (mimeType === "image/heic" || mimeType === "image/heif" || isHeicBuffer(source))) {
+      try {
+        source = Buffer.from(await convertHeicToJpeg(source));
+      } catch {
+        return NextResponse.json(
+          { error: "No se ha podido procesar la foto del iPhone. Prueba con JPG o PNG." },
+          { status: 400 }
+        );
+      }
+    }
     let buffer = source;
     let contentType = mimeType;
     let ext =

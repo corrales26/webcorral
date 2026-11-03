@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  serverExternalPackages: ["heic-convert", "heic-decode", "libheif-js"],
   async headers() {
     return [
       {
@@ -39,6 +40,13 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/*": ["./data/**/*"],
     "/api/**/*": ["./data/**/*"],
+    "/api/upload": [
+      "./node_modules/heic-convert/**/*",
+      "./node_modules/heic-decode/**/*",
+      "./node_modules/libheif-js/**/*",
+      "./node_modules/jpeg-js/**/*",
+      "./node_modules/pngjs/**/*",
+    ],
   },
   async rewrites() {
     return [

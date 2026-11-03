@@ -1,6 +1,9 @@
+import { isHeicUpload } from "@/lib/media-utils";
+
 const MAX_EDGE = 1920;
 
 export async function compressImageFile(file: File): Promise<File> {
+  if (isHeicUpload(file)) return file;
   if (!file.type.startsWith("image/")) return file;
 
   const bitmap = await createImageBitmap(file);
